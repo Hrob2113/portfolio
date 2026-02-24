@@ -197,7 +197,7 @@ section{position:relative}
   position:relative;z-index:2;
 }
 .h-a{color:var(--text);display:block}
-.h-c{background:linear-gradient(125deg,#CC1C0A 5%,#7A0E04 90%);-webkit-background-clip:text;background-clip:text;color:transparent;display:block}
+.h-c{background:linear-gradient(125deg,#CC1C0A 5%,#7A0E04 90%);-webkit-background-clip:text;background-clip:text;color:transparent;display:block;filter:drop-shadow(0 2px 12px rgba(0,0,0,.5))}
 .h-foot{display:flex;align-items:flex-end;gap:60px;margin-top:44px;position:relative;z-index:2}
 .h-copy{max-width:380px}
 .h-copy h2{
@@ -476,7 +476,7 @@ section{position:relative}
   background:linear-gradient(135deg,rgba(196,18,8,.12) 0%,transparent 55%);
   z-index:1;pointer-events:none;
 }
-.ab-port img{width:100%;height:500px;object-fit:cover;filter:grayscale(28%) contrast(1.08) brightness(.82);border-radius:var(--r-xl)}
+.ab-port img{width:100%;height:500px;object-fit:cover;filter:grayscale(100%) contrast(1.1) brightness(.8);border-radius:var(--r-xl)}
 .ab-photo-placeholder{
   width:100%;height:500px;border-radius:var(--r-xl);
   background:
@@ -570,7 +570,7 @@ section{position:relative}
 .st:hover{background:rgba(255,255,255,.07);transform:translateY(-4px)}
 .st-n{
   font-family:var(--fd);font-weight:900;font-size:64px;
-  color:transparent;-webkit-text-stroke:1px rgba(196,18,8,.18);
+  color:transparent;-webkit-text-stroke:1.5px rgba(196,18,8,.4);
   line-height:1;margin-bottom:14px;display:block;
 }
 .st-name{font-family:var(--fd);font-weight:800;font-size:22px;letter-spacing:.04em;color:var(--text);margin-bottom:10px}
@@ -858,6 +858,7 @@ footer>*{position:relative;z-index:1}
 /* ── SECTION BACKGROUNDS: hero stays clear, stack onward gets darkened ── */
 #stack,#works,#services,#about,#process,#contact{
   background:rgba(4,4,8,0.88);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
 }
 .footer-wrap{background:rgba(4,4,8,0.88)}
 /* ── HROB ICON ── */
@@ -875,13 +876,13 @@ footer>*{position:relative;z-index:1}
 
 /* ── HERO PORTRAIT ── */
 .h-portrait{
-  position:absolute;right:6%;top:50%;transform:translateY(-50%);
+  position:absolute;right:12%;bottom:30%;
   z-index:2;pointer-events:none;
   width:clamp(240px,28vw,420px);
   display:flex;align-items:center;justify-content:center;
 }
 .h-portrait-frame{
-  width:70%;aspect-ratio:3/4;
+  width:90%;aspect-ratio:3/4;
   border-radius:16px;overflow:hidden;
   border:1px solid rgba(255,255,255,.08);
   box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.03);
