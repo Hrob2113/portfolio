@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Fluid Gradients</title>
+    <style>
+        /* --- WebGL Thermal Background Canvas --- */
+        #bg-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: -1;          /* always behind page content */
+            pointer-events: none; /* never steals clicks or hover */
+        }
+
+        /* --- Global Reset & Layout --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: #020a0d; /* fallback if WebGL fails */
+            color: #eee;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 3rem 2rem;
+            min-height: 100vh;
+        }
+        h1 { margin-bottom: 3rem; font-weight: 300; letter-spacing: 1px; }
+
+        /* --- Pattern Gallery Grid --- */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        /* --- Shared Canvas & Grain Styles --- */
+        .canvas {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            background-color: #050505;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            cursor: crosshair; /* Adds to the interactive feel */
+        }
+
+        /* The Grain Overlay - Highest z-index to sit over ripples */
+        .canvas::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 20;
+        }
+
+        /* Shared Shape Styles */
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.8;
+            will-change: transform, translate;
+            animation: drift 15s infinite alternate ease-in-out;
+
+            /* --- INTERACTIVE PARALLAX SETUP --- */
+            --parallax: 20px; /* Default shift distance */
+            /* This translates the shape based on mouse variables updated by JS */
+            translate: calc(var(--mx, 0) * var(--parallax)) calc(var(--my, 0) * var(--parallax));
+            transition: translate 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* Set different parallax depths so the fluid layers separate when mouse moves */
+        .shape-1 { --parallax: 35px; }
+        .shape-2 { --parallax: -40px; }
+        .shape-3 { --parallax: 15px; }
+
+        /* --- Animation Keyframes --- */
+        @keyframes drift {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.1); }
+            100% { transform: rotate(-5deg) scale(0.9); }
+        }
+        @keyframes shimmer {
+            0%, 100% { opacity: 0.8; transform: scaleX(1); }
+            50% { opacity: 1; transform: scaleX(1.05); }
+        }
+
+        /* --- THE INTERACTIVE LIQUID WAKE (Created by JS) --- */
+        .water-ripple {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            filter: blur(12px);
+            pointer-events: none;
+            z-index: 10;
+            mix-blend-mode: color-dodge; /* Makes it interact brightly with the gradients */
+            animation: rippleExpand 1.5s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        }
+
+        @keyframes rippleExpand {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(15); opacity: 0; }
+        }
+
+
+        /* =========================================
+           PATTERN 1: Wavy Ribbons (Red -> Teal)
+           ========================================= */
+        .pattern-ribbons .shape-1 {
+            width: 120%; height: 30%;
+            background: linear-gradient(90deg, #ff1a00, #ff6a00);
+            top: 20%; left: -10%;
+            transform: rotate(-15deg);
+            animation-delay: -2s;
+        }
+        .pattern-ribbons .shape-2 {
+            width: 100%; height: 80%;
+            background: linear-gradient(180deg, #005f6b, #008c9e);
+            bottom: -20%; right: -10%;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation-delay: -5s;
+            filter: blur(80px);
+        }
+        .pattern-ribbons .shape-3 {
+            width: 60%; height: 60%;
+            background: #020a0d;
+            top: 50%; left: 30%;
+            filter: blur(100px);
+            opacity: 0.6;
+        }
+
+
+        /* =========================================
+           PATTERN 2: The "Sun with Gaps"
+           ========================================= */
+        .pattern-sun {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+        }
+        .sun-slice {
+            width: 80%; height: 8%;
+            margin: 2% 0;
+            background: linear-gradient(90deg, #003f47 0%, #ff4500 40%, #ff6a00 60%, #003f47 100%);
+            border-radius: 50%;
+            filter: blur(15px);
+            opacity: 0.9;
+            animation: shimmer 4s infinite ease-in-out;
+            /* Allow the slices to subtly shift with the mouse too */
+            --parallax: 10px;
+            translate: calc(var(--mx, 0) * var(--parallax)) calc(var(--my, 0) * var(--parallax));
+            transition: translate 0.5s ease-out;
+        }
+        .sun-slice:nth-child(even) { --parallax: -10px; } /* Opposing movement */
+        .sun-slice:nth-child(1), .sun-slice:nth-last-child(1) { width: 50%; opacity: 0.5; background: linear-gradient(90deg, #002a30, #a81a00, #002a30); }
+        .sun-slice:nth-child(2), .sun-slice:nth-last-child(2) { width: 70%; opacity: 0.7; }
+
+
+        /* =========================================
+           PATTERN 3: Swirling Nebula
+           ========================================= */
+        .pattern-nebula .shape-1 {
+            width: 60%; height: 60%;
+            background: radial-gradient(circle, #ff3300 0%, #a80000 70%);
+            top: 50%; left: 50%;
+            margin-top: -30%; margin-left: -30%; /* Replaced translate so parallax works smoothly */
+            animation-name: drift;
+            animation-duration: 20s;
+        }
+        .pattern-nebula .shape-2 {
+            width: 100%; height: 100%;
+            background: linear-gradient(45deg, #005f6b, #0b1a1e);
+            top: 0; left: 0;
+            border-radius: 60% 40% 30% 70% / 50% 50% 50% 50%;
+            animation-delay: -8s;
+            filter: blur(100px);
+            opacity: 0.7;
+        }
+        .pattern-nebula .shape-3 {
+            width: 80%; height: 40%;
+            background: #000;
+            bottom: 10%; left: -10%;
+            transform: rotate(20deg);
+            filter: blur(120px);
+            opacity: 0.8;
+            animation-delay: -12s;
+        }
+
+
+        /* =========================================
+           PATTERN 4: Eclipse
+           ========================================= */
+        .pattern-eclipse {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .eclipse-body {
+            position: absolute;
+            width: 60%;
+            aspect-ratio: 1/1;
+            background-color: #020a0d;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        .eclipse-corona {
+            position: absolute;
+            width: 70%;
+            aspect-ratio: 1/1;
+            border-radius: 50%;
+            background: radial-gradient(circle, #ff4500 30%, #ff6a00 50%, #005f6b 70%, transparent 85%);
+            filter: blur(50px);
+            opacity: 0.8;
+            /* Corona shifts slightly with mouse */
+            --parallax: 15px;
+            translate: calc(var(--mx, 0) * var(--parallax)) calc(var(--my, 0) * var(--parallax));
+            transition: translate 0.5s ease-out;
+        }
+        .eclipse-flare {
+            position: absolute;
+            top: 22%;
+            width: 20px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px white, 0 0 20px 10px #ff6a00, 0 0 40px 20px #ff4500;
+            z-index: 3;
+            transform: rotate(45deg);
+            /* Flare moves significantly opposite to corona for 3D depth */
+            --parallax: -30px;
+            translate: calc(var(--mx, 0) * var(--parallax)) calc(var(--my, 0) * var(--parallax));
+            transition: translate 0.3s ease-out;
+        }
+        .eclipse-flare::after {
+            content: "";
+            position: absolute;
+            width: 100%; height: 100%;
+            background: inherit;
+            box-shadow: inherit;
+            transform: rotate(90deg);
+        }
+
+
+        /* =========================================
+           PATTERN 5: Rising Fluid (Dark Top)
+           ========================================= */
+        .pattern-rising-fluid {
+            background-color: #020a0d;
+        }
+        .pattern-rising-fluid .shape-1 {
+            width: 150%; height: 60%;
+            background: #004d56;
+            bottom: -20%; left: -20%;
+            border-radius: 50% 40% 70% 30% / 40% 50% 60% 50%;
+            transform: rotate(-10deg);
+            animation-delay: -1s;
+        }
+        .pattern-rising-fluid .shape-2 {
+            width: 120%; height: 40%;
+            background: linear-gradient(90deg, #a80000, #ff4500);
+            bottom: -10%; right: -20%;
+            border-radius: 50%;
+            transform: rotate(15deg);
+            animation-delay: -5s;
+        }
+        .pattern-rising-fluid .shape-3 {
+            width: 60%; height: 30%;
+            background: #ff8c00;
+            bottom: -5%; left: 20%;
+            border-radius: 50%;
+            filter: blur(80px);
+            animation-delay: -9s;
+        }
+        .pattern-rising-fluid .dark-top-mask {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 50%;
+            background: linear-gradient(to bottom, #020a0d 15%, transparent 100%);
+            z-index: 5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- WebGL thermal gradient background — rendered at z-index: -1 -->
+<canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+<h1>Interactive Liquid Gradients</h1>
+
+<div class="gallery">
+    <div class="canvas pattern-ribbons">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="canvas pattern-sun">
+        <div class="sun-slice"></div><div class="sun-slice"></div><div class="sun-slice"></div>
+        <div class="sun-slice"></div><div class="sun-slice"></div><div class="sun-slice"></div>
+        <div class="sun-slice"></div>
+    </div>
+
+    <div class="canvas pattern-nebula">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="canvas pattern-eclipse">
+        <div class="eclipse-corona"></div>
+        <div class="eclipse-body"></div>
+        <div class="eclipse-flare"></div>
+    </div>
+
+    <div class="canvas pattern-rising-fluid">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+        <div class="dark-top-mask"></div>
+    </div>
+</div>
+
+<script>
+    const canvases = document.querySelectorAll('.canvas');
+
+    canvases.forEach(canvas => {
+        let isThrottled = false;
+
+        canvas.addEventListener('mousemove', (e) => {
+            // Get mouse coordinates relative to the specific card
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // 1. Fluid Parallax Logic
+            // Normalize mouse coordinates to a scale of -1 to 1 based on the center of the card
+            const mx = (x / rect.width - 0.5) * 2;
+            const my = (y / rect.height - 0.5) * 2;
+
+            // Pass these coordinates to CSS to push the fluid layers around
+            canvas.style.setProperty('--mx', mx);
+            canvas.style.setProperty('--my', my);
+
+            // 2. Liquid Wake (Ripples) Logic
+            // We throttle this so we don't spawn 1000 divs a second and crash the browser
+            if (!isThrottled) {
+                createRipple(canvas, x, y);
+                isThrottled = true;
+                setTimeout(() => isThrottled = false, 50); // Spawns a new fluid drop every 50 milliseconds
+            }
+        });
+
+        // Smoothly return layers to resting position when mouse leaves the card
+        canvas.addEventListener('mouseleave', () => {
+            canvas.style.setProperty('--mx', 0);
+            canvas.style.setProperty('--my', 0);
+        });
+    });
+
+    // Function to generate the expanding fluid droplets
+    function createRipple(container, x, y) {
+        const ripple = document.createElement('div');
+        ripple.classList.add('water-ripple');
+
+        // Place the ripple exactly where the cursor is
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+
+        container.appendChild(ripple);
+
+        // Remove the element from the HTML after 1.5 seconds so memory stays clean
+        setTimeout(() => {
+            ripple.remove();
+        }, 1500);
+    }
+</script>
+
+<!-- Three.js (sets window.THREE) -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.183.0/build/three.min.js"></script>
+
+<!-- ThermalGradient Three.js background -->
+<script src="js/thermal-gradient.js"></script>
+<script>
+    const bg = new ThermalGradient(document.getElementById('bg-canvas'), {
+        colors: {
+            background: [0.008, 0.039, 0.051],  // #020A0D
+            teal:       [0.000, 0.188, 0.250],  // #003040
+            orange:     [1.000, 0.271, 0.000],  // #FF4500
+            hot:        [1.000, 0.549, 0.031],  // #FF8C08
+        },
+        grainIntensity: 0.14,
+        waveAmplitude:  0.20,
+        waveFrequency:  2.5,
+        speed:          0.30,
+        fluidRadius:    2.8,
+        mouseStrength:  0.22,
+        spring: { stiffness: 0.055, damping: 0.82 },
+        segments: 256,
+    });
+    bg.init().start();
+
+    // Live tuning from the browser console:
+    //   thermalBg.updateConfig({ speed: 0.6, grainIntensity: 0.22 })
+    //   thermalBg.stop() / thermalBg.start()
+    window.thermalBg = bg;
+</script>
+
+</body>
+</html>
