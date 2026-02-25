@@ -11,9 +11,9 @@ Route::get('/', function () {
     return view('welcome', compact('settings'));
 })->name('home');
 
-Route::get('/bg', function () {
+Route::get('/bg-configurator', function () {
     return view('bg');
-});
+})->name('bg.configurator');
 
 Route::post('/locale/{locale}', function (Request $request, string $locale) {
     if (! in_array($locale, ['en', 'cs'])) {
