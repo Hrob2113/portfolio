@@ -1309,14 +1309,14 @@ requestAnimationFrame(()=>{
     <div class="ct-eye">{{ __('contact.eye') }}</div>
     <h2 class="ct-hed">{!! __('contact.heading') !!}</h2>
     <p class="ct-sub">{{ __('contact.sub') }}</p>
-    <a href="mailto:hello@robinhrdlicka.dev" class="ct-email">hello@robinhrdlicka.dev</a>
+    <a href="mailto:{{ $settings['contact_email'] ?? 'hello@robinhrdlicka.dev' }}" class="ct-email">{{ $settings['contact_email'] ?? 'hello@robinhrdlicka.dev' }}</a>
     <div class="cf-anchor" id="cf-anchor">
       <div class="cf-popup" id="cf-popup">
         <div class="cf-accent"></div>
         <button type="button" class="cf-close" id="cf-close" aria-label="Close">&times;</button>
         <div class="cf-head">{{ __('contact.formHead') }}</div>
         <p class="cf-subhead">{{ __('contact.formSub') }}</p>
-        <form id="cf-form" action="mailto:hello@robinhrdlicka.dev" method="post" enctype="text/plain">
+        <form id="cf-form" action="{{ route('contact.store') }}" method="post">
           <div class="cf-row">
             <div class="cf-field">
               <label class="cf-label" for="cf-name">{{ __('contact.labelName') }}</label>
@@ -1339,14 +1339,15 @@ requestAnimationFrame(()=>{
               <textarea class="cf-textarea" id="cf-msg" name="message" placeholder="{{ __('contact.phMsg') }}" required></textarea>
             </div>
           </div>
-          <button type="submit" class="cf-submit">{{ __('contact.send') }}</button>
+          <button type="submit" class="cf-submit" id="cf-submit">{{ __('contact.send') }}</button>
         </form>
+        <div class="cf-status" id="cf-status" style="display:none;padding:12px 16px;margin-top:12px;border-radius:8px;font-family:var(--fm);font-size:12px;letter-spacing:.04em"></div>
         <div class="cf-note">{{ __('contact.note') }}</div>
       </div>
       <button type="button" class="btn-ct" id="open-cf">{{ __('contact.writeBtn') }}</button>
     </div>
     <div class="so-links">
-      <a href="#">GitHub</a><a href="#">LinkedIn</a><a href="#">Dribbble</a><a href="#">Twitter / X</a>
+      <a href="{{ $settings['github_url'] ?? '#' }}" target="_blank" rel="noopener">GitHub</a><a href="{{ $settings['linkedin_url'] ?? '#' }}" target="_blank" rel="noopener">LinkedIn</a><a href="{{ $settings['dribbble_url'] ?? '#' }}" target="_blank" rel="noopener">Dribbble</a><a href="{{ $settings['twitter_url'] ?? '#' }}" target="_blank" rel="noopener">Twitter / X</a>
     </div>
     <div class="ct-sign">{{ __('contact.sign') }}</div>
   </div>
@@ -1762,6 +1763,42 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(!entry.isIntersecting&&isOpen()) closePopup();
   },{threshold:0.15});
   popupObs.observe(popup);
+
+  /* AJAX submit */
+  const form=document.getElementById('cf-form');
+  const status=document.getElementById('cf-status');
+  const submitBtn=document.getElementById('cf-submit');
+  if(form){
+    form.addEventListener('submit',async e=>{
+      e.preventDefault();
+      submitBtn.disabled=true;
+      submitBtn.style.opacity='.5';
+      status.style.display='none';
+      try{
+        const res=await fetch(form.action,{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Accept':'application/json','X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content},
+          body:JSON.stringify({name:form.name.value,email:form.email.value,subject:form.subject.value,message:form.message.value})
+        });
+        const data=await res.json();
+        if(res.ok){
+          status.style.display='block';status.style.background='rgba(16,185,129,.15)';status.style.color='#6ee7b7';
+          status.textContent='Message sent successfully!';
+          form.reset();
+          setTimeout(closePopup,2000);
+        }else{
+          const errors=data.errors?Object.values(data.errors).flat().join(' '):'Something went wrong.';
+          status.style.display='block';status.style.background='rgba(196,18,8,.15)';status.style.color='#fca5a5';
+          status.textContent=errors;
+        }
+      }catch{
+        status.style.display='block';status.style.background='rgba(196,18,8,.15)';status.style.color='#fca5a5';
+        status.textContent='Network error. Please try again.';
+      }finally{
+        submitBtn.disabled=false;submitBtn.style.opacity='1';
+      }
+    });
+  }
 })();
 
 /* ══════════════════════════════════════════════════
