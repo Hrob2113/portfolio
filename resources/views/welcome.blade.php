@@ -38,6 +38,23 @@
   <a href="#contact" class="n-cta">{{ __('nav.contact') }}</a>
 </nav>
 
+<!-- MOBILE HAMBURGER -->
+<button class="ham" id="ham" aria-label="Menu">
+  <span class="ham-line"></span>
+  <span class="ham-line"></span>
+</button>
+
+<!-- MOBILE FULLSCREEN MENU -->
+<div class="mob-menu" id="mob-menu">
+  <div class="mob-menu-bg" id="mob-menu-bg"></div>
+  <div class="mob-menu-content">
+    <a href="#works" class="mob-link" data-i="1">{{ __('nav.works') }}</a>
+    <a href="#services" class="mob-link" data-i="2">{{ __('nav.services') }}</a>
+    <a href="#about" class="mob-link" data-i="3">{{ __('nav.about') }}</a>
+    <a href="#contact" class="mob-link mob-link--cta" data-i="4">{{ __('nav.contact') }}</a>
+  </div>
+</div>
+
 <div class="lang-toggle" data-active="{{ app()->getLocale() }}">
     <div class="lang-toggle-track"></div>
     <button type="button" class="lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}" data-locale="en">EN</button>
@@ -179,7 +196,8 @@ requestAnimationFrame(()=>{
     <button class="f-btn" data-filter="ui">{{ __('works.filterUi') }}</button>
   </div>
 
-  <div class="pg rv" style="transition-delay:.18s" id="portfolio-grid">
+  <div class="pg rv carousel-container" style="transition-delay:.18s" id="portfolio-grid">
+    <div class="pg-track">
 
     <!-- 1: Featured web -->
     <div class="pc pc--featured" data-cat="web">
@@ -332,6 +350,7 @@ requestAnimationFrame(()=>{
 {{--      </div>--}}
 {{--    </div>--}}
 
+    </div><!-- /pg-track -->
   </div><!-- /pg -->
 </section>
 

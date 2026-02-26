@@ -364,14 +364,13 @@ window.addEventListener('DOMContentLoaded',()=>{
     },2000);
   }
 
-  /* Nav "Contact" link */
-  const navContact=document.querySelector('.n-links a[href="#contact"]');
-  if(navContact){
-    navContact.addEventListener('click',e=>{
+  /* Nav "Contact" links (desktop + mobile) */
+  document.querySelectorAll('.n-links a[href="#contact"], .mob-link[href="#contact"]').forEach(el=>{
+    el.addEventListener('click',e=>{
       e.preventDefault();
       scrollToContactAndOpen();
     });
-  }
+  });
 
   /* "Hire me" nav CTA */
   const hireCta=document.querySelector('.n-cta');
@@ -431,6 +430,54 @@ window.addEventListener('DOMContentLoaded',()=>{
 })();
 
 /* ══════════════════════════════════════════════════
+   MOBILE HAMBURGER MENU
+═══════════════════════════════════════════════════ */
+(function(){
+  const ham=document.getElementById('ham');
+  const menu=document.getElementById('mob-menu');
+  if(!ham||!menu) return;
+
+  let isOpen=false,closing=false;
+
+  function open(){
+    if(isOpen||closing) return;
+    isOpen=true;
+    menu.classList.remove('closing');
+    menu.classList.add('open');
+    ham.classList.add('active');
+    document.body.style.overflow='hidden';
+  }
+
+  function close(){
+    if(!isOpen||closing) return;
+    closing=true;
+    menu.classList.add('closing');
+    menu.classList.remove('open');
+    ham.classList.remove('active');
+    setTimeout(()=>{
+      menu.classList.remove('closing');
+      closing=false;
+      isOpen=false;
+      document.body.style.overflow='';
+    },650);
+  }
+
+  ham.addEventListener('click',()=>{ isOpen?close():open() });
+
+  /* Close on link click */
+  menu.querySelectorAll('.mob-link').forEach(link=>{
+    link.addEventListener('click',()=>{
+      close();
+    });
+  });
+
+  /* Close on Escape */
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'&&isOpen) close();
+  });
+})();
+
+/* ══════════════════════════════════════════════════
    Locale switch — animated overlay + form POST
 ═══════════════════════════════════════════════════ */
 (function(){
@@ -470,4 +517,85 @@ window.addEventListener('DOMContentLoaded',()=>{
       },200);
     });
   });
+})();
+
+/* ══════════════════════════════════════════════════
+   WORKS CAROUSEL
+═══════════════════════════════════════════════════ */
+(function() {
+  const track = document.querySelector('.pg-track');
+  if (!track) return;
+
+  let items = Array.from(track.children);
+  let currentIndex = 0;
+  let intervalId;
+  let isMobile = window.innerWidth <= 900;
+
+  function setupCarousel() {
+    if (!isMobile) return;
+    // Clone items for infinite loop
+    items.forEach(item => {
+      const clone = item.cloneNode(true);
+      track.appendChild(clone);
+    });
+    items = Array.from(track.children);
+  }
+
+  function updateCarousel() {
+    if (!isMobile) return;
+    const itemWidth = items[0].offsetWidth;
+    const offset = -currentIndex * (itemWidth + 16) + (track.parentElement.offsetWidth / 2 - itemWidth / 2);
+    track.style.transform = `translateX(${offset}px)`;
+
+    items.forEach((item, index) => {
+      item.classList.remove('active');
+      if (index % (items.length / 2) === currentIndex % (items.length / 2)) {
+        item.classList.add('active');
+      }
+    });
+  }
+
+  function next() {
+    currentIndex++;
+    updateCarousel();
+
+    if (currentIndex >= items.length / 2) {
+      setTimeout(() => {
+        track.style.transition = 'none';
+        currentIndex = 0;
+        updateCarousel();
+        setTimeout(() => {
+          track.style.transition = 'transform 0.5s ease-in-out';
+        }, 50);
+      }, 500);
+    }
+  }
+
+  function start() {
+    if (isMobile) {
+      intervalId = setInterval(next, 2000);
+    }
+  }
+
+  function stop() {
+    clearInterval(intervalId);
+  }
+
+  function init() {
+    isMobile = window.innerWidth <= 900;
+    if (isMobile) {
+      setupCarousel();
+      updateCarousel();
+      start();
+      track.addEventListener('mouseenter', stop);
+      track.addEventListener('mouseleave', start);
+    } else {
+      stop();
+      track.style.transform = '';
+      items.forEach(item => item.classList.remove('active'));
+    }
+  }
+
+  init();
+  window.addEventListener('resize', init);
 })();
