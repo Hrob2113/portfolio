@@ -530,6 +530,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   let currentIndex = 0;
   let intervalId;
   let isMobile = window.innerWidth <= 900;
+  let isDragging = false;
+  let startPos = 0;
+  let currentTranslate = 0;
+  let prevTranslate = 0;
+  let animationID;
 
   function setupCarousel() {
     if (!isMobile) return;
@@ -541,12 +546,20 @@ window.addEventListener('DOMContentLoaded',()=>{
     items = Array.from(track.children);
   }
 
-  function updateCarousel() {
+  function setPositionByIndex() {
     if (!isMobile) return;
     const itemWidth = items[0].offsetWidth;
-    const offset = -currentIndex * (itemWidth + 16) + (track.parentElement.offsetWidth / 2 - itemWidth / 2);
-    track.style.transform = `translateX(${offset}px)`;
+    currentTranslate = -currentIndex * (itemWidth + 16) + (track.parentElement.offsetWidth / 2 - itemWidth / 2);
+    prevTranslate = currentTranslate;
+    setSliderPosition();
+  }
 
+  function setSliderPosition() {
+    track.style.transform = `translateX(${currentTranslate}px)`;
+  }
+
+  function updateCarousel() {
+    if (!isMobile) return;
     items.forEach((item, index) => {
       item.classList.remove('active');
       if (index % (items.length / 2) === currentIndex % (items.length / 2)) {
@@ -557,12 +570,14 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   function next() {
     currentIndex++;
+    setPositionByIndex();
     updateCarousel();
 
     if (currentIndex >= items.length / 2) {
       setTimeout(() => {
         track.style.transition = 'none';
         currentIndex = 0;
+        setPositionByIndex();
         updateCarousel();
         setTimeout(() => {
           track.style.transition = 'transform 0.5s ease-in-out';
@@ -581,14 +596,63 @@ window.addEventListener('DOMContentLoaded',()=>{
     clearInterval(intervalId);
   }
 
+  function touchStart(index) {
+    return function(event) {
+      currentIndex = index;
+      startPos = getPositionX(event);
+      isDragging = true;
+      animationID = requestAnimationFrame(animation);
+      track.style.transition = 'none';
+      stop();
+    }
+  }
+
+  function touchEnd() {
+    isDragging = false;
+    cancelAnimationFrame(animationID);
+    const movedBy = currentTranslate - prevTranslate;
+
+    if (movedBy < -100 && currentIndex < items.length - 1) currentIndex++;
+    if (movedBy > 100 && currentIndex > 0) currentIndex--;
+
+    setPositionByIndex();
+    track.style.transition = 'transform 0.5s ease-in-out';
+    start();
+  }
+
+  function touchMove(event) {
+    if (isDragging) {
+      const currentPosition = getPositionX(event);
+      currentTranslate = prevTranslate + currentPosition - startPos;
+    }
+  }
+
+  function getPositionX(event) {
+    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+  }
+
+  function animation() {
+    setSliderPosition();
+    if (isDragging) requestAnimationFrame(animation);
+  }
+
   function init() {
     isMobile = window.innerWidth <= 900;
     if (isMobile) {
       setupCarousel();
+      setPositionByIndex();
       updateCarousel();
       start();
-      track.addEventListener('mouseenter', stop);
-      track.addEventListener('mouseleave', start);
+
+      items.forEach((item, index) => {
+        item.addEventListener('touchstart', touchStart(index), {passive: true});
+        item.addEventListener('touchend', touchEnd, {passive: true});
+        item.addEventListener('touchmove', touchMove, {passive: true});
+        item.addEventListener('mousedown', touchStart(index));
+        item.addEventListener('mouseup', touchEnd);
+        item.addEventListener('mouseleave', touchEnd);
+        item.addEventListener('mousemove', touchMove);
+      });
     } else {
       stop();
       track.style.transform = '';
