@@ -51,7 +51,7 @@
     <a href="#works" class="mob-link" data-i="1">{{ __('nav.works') }}</a>
     <a href="#services" class="mob-link" data-i="2">{{ __('nav.services') }}</a>
     <a href="#about" class="mob-link" data-i="3">{{ __('nav.about') }}</a>
-    <a href="#contact" class="mob-link mob-link--cta" data-i="4">{{ __('nav.contact') }}</a>
+    <a href="#contact" class="mob-link mob-link" data-i="4">{{ __('nav.contact') }}</a>
   </div>
 </div>
 

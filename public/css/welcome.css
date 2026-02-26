@@ -899,7 +899,7 @@ footer{position:relative;z-index:2}
 }
 .ham-line{
   display:block;width:24px;height:1.5px;
-  background:var(--amber);
+  background:white;
   margin:0 auto;
   transition:transform .7s cubic-bezier(.19, 1, .22, 1),opacity .3s;
 }
@@ -919,21 +919,15 @@ footer{position:relative;z-index:2}
 .mob-menu.open{pointer-events:auto}
 .mob-menu-bg {
   position: absolute;
-  width: 60px;
-  height: 60px;
-  top: 18px;
-  right: 18px;
-  border-radius: 50%;
-  background: radial-gradient(circle, #4d0500, #000);
-  background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJub2lzZSI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuNyIgbnVtT2N0YXZlcz0iMiIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNub2lzZSkiIG9wYWNpdHk9IjAuMyIvPjwvZmlsdGVyPjwvc3ZnPg=='),
-  url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJ2ZWlucyI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjAuMDIgMC4wNSIgbnVtT2N0YXZlcz0iMiIgc2VlZD0iMiIvPjxmZURpZmZ1c2VMaWdodGluZyBzdXJmYWNlU2NhbGU9IjEwIiBkaWZmdXNlQ29uc3RhbnQ9IjEiIGxpZ2h0aW5nLWNvbG9yPSIjZmZmIj48ZmVEaXN0YW50TGlnaHQgYXppbXV0aD0iMjM1IiBlbGV2YXRpb249IjgwIi8+PC9mZURpZmZ1c2VMaWdodGluZz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWx0ZXI9InVybCgjdkVpbnMpIiBvcGFjaXR5PSIwLjUiLz48L3N2Zz4=');
-  mix-blend-mode: screen;
-  transform: scale(0);
-  transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  transform-origin: center center;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .mob-menu.open .mob-menu-bg{
-  transform:scale(60);
+  opacity: 1;
 }
 .mob-menu-content{
   position:absolute;inset:0;
@@ -973,8 +967,8 @@ footer{position:relative;z-index:2}
 }
 /* Closing state — reverse */
 .mob-menu.closing .mob-menu-bg{
-  transform:scale(0);
-  transition:transform .5s cubic-bezier(.6,0,.4,1) .15s;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1) .15s;
 }
 .mob-menu.closing .mob-menu-content{
   opacity:0;
@@ -1019,7 +1013,7 @@ footer{position:relative;z-index:2}
   }
   .pg-track .pc {
     flex: 0 0 82vw;
-    height: 340px;
+    height: 400px;
     scroll-snap-align: center;
     border-radius: var(--r-lg);
     transform: scale(0.85);
@@ -1083,7 +1077,7 @@ footer{position:relative;z-index:2}
 
 @media(max-width:480px){
   .h-name{font-size:clamp(60px,18vw,120px)}
-  .pg-track .pc{flex:0 0 88vw;height:300px}
+  .pg-track .pc{flex:0 0 88vw;height:360px}
   .ct-hed{font-size:clamp(42px,14vw,80px)}
   .ct-email{font-size:clamp(16px,5vw,28px)}
   .works-top{flex-direction:column;align-items:flex-start;gap:12px}
