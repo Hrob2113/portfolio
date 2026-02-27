@@ -275,6 +275,10 @@
 
   btns.forEach(b => {
     b.addEventListener('click', () => {
+      // Do not run filter logic if the carousel is active
+      if (document.getElementById('portfolio-grid').classList.contains('carousel-active')) {
+        return;
+      }
       const f = b.dataset.filter;
       if(f === current) return;
       current = f;
@@ -520,146 +524,333 @@ window.addEventListener('DOMContentLoaded',()=>{
 })();
 
 /* ══════════════════════════════════════════════════
-   WORKS CAROUSEL
+   WORKS CAROUSEL — Advanced Peek Carousel
+   - Bidirectional infinite scrolling (left and right)
+   - Smooth animations with active item emphasis
+   - CSS scroll-snap for native smooth snapping
+   - Auto-play with intelligent pause/resume
+   - IntersectionObserver for dynamic item states
+   - Performance optimized with RAF and debouncing
 ═══════════════════════════════════════════════════ */
 (function() {
-  const track = document.querySelector('.pg-track');
-  if (!track) return;
+    const container = document.getElementById('portfolio-grid');
+    if (!container) return;
+    const track = container.querySelector('.pg-track');
+    if (!track) return;
 
-  let items = Array.from(track.children);
-  let currentIndex = 0;
-  let intervalId;
-  let isMobile = window.innerWidth <= 900;
-  let isDragging = false;
-  let startPos = 0;
-  let currentTranslate = 0;
-  let prevTranslate = 0;
-  let animationID;
+    let isRunning = false;
+    let autoPlayInterval = null;
+    let resumeTimeout = null;
+    let isUserInteracting = false;
+    let activeObserver = null;
+    let originalTrackHTML = '';
+    let isTransitioning = false;
+    const AUTO_PLAY_DELAY = 3500;
+    const RESUME_DELAY = 4000;
 
-  function setupCarousel() {
-    if (!isMobile) return;
-    // Clone items for infinite loop
-    items.forEach(item => {
-      const clone = item.cloneNode(true);
-      track.appendChild(clone);
-    });
-    items = Array.from(track.children);
-  }
+    const setup = () => {
+        // Store original HTML on first run
+        if (originalTrackHTML === '') {
+            originalTrackHTML = track.innerHTML;
+        }
 
-  function setPositionByIndex() {
-    if (!isMobile) return;
-    const itemWidth = items[0].offsetWidth;
-    currentTranslate = -currentIndex * (itemWidth + 16) + (track.parentElement.offsetWidth / 2 - itemWidth / 2);
-    prevTranslate = currentTranslate;
-    setSliderPosition();
-  }
+        // Check viewport size
+        const isDesktop = window.innerWidth > 1024;
 
-  function setSliderPosition() {
-    track.style.transform = `translateX(${currentTranslate}px)`;
-  }
+        // Clean up any existing setup
+        cleanup();
 
-  function updateCarousel() {
-    if (!isMobile) return;
-    items.forEach((item, index) => {
-      item.classList.remove('active');
-      if (index % (items.length / 2) === currentIndex % (items.length / 2)) {
-        item.classList.add('active');
-      }
-    });
-  }
+        if (isDesktop) {
+            // Desktop: restore original grid layout
+            if (isRunning) {
+                track.innerHTML = originalTrackHTML;
+                container.style.scrollBehavior = '';
+                container.scrollLeft = 0;
+                isRunning = false;
+            }
+            return;
+        }
 
-  function next() {
-    currentIndex++;
-    setPositionByIndex();
-    updateCarousel();
+        if (isRunning) return;
 
-    if (currentIndex >= items.length / 2) {
-      setTimeout(() => {
-        track.style.transition = 'none';
-        currentIndex = 0;
-        setPositionByIndex();
-        updateCarousel();
+        // Mobile/Tablet: Setup carousel
+        setupCarousel();
+    };
+
+    const cleanup = () => {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+        }
+        if (resumeTimeout) {
+            clearTimeout(resumeTimeout);
+            resumeTimeout = null;
+        }
+        if (activeObserver) {
+            activeObserver.disconnect();
+            activeObserver = null;
+        }
+        container.removeEventListener('scroll', handleScroll);
+        container.removeEventListener('touchstart', handleTouchStart);
+        container.removeEventListener('touchend', handleTouchEnd);
+        container.removeEventListener('mousedown', handleMouseDown);
+        container.removeEventListener('mouseup', handleMouseUp);
+        container.removeEventListener('mouseenter', handleMouseEnter);
+        container.removeEventListener('mouseleave', handleMouseLeave);
+    };
+
+    const setupCarousel = () => {
+        // Start with clean slate
+        track.innerHTML = originalTrackHTML;
+        const items = Array.from(track.children);
+        if (items.length < 2) return;
+
+        // Create THREE sets of clones for seamless infinite scrolling
+        // Prepend clones (for scrolling left)
+        const prependClones = [];
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            clone.dataset.clone = 'prepend';
+            prependClones.push(clone);
+        });
+        prependClones.reverse().forEach(clone => {
+            track.insertBefore(clone, track.firstChild);
+        });
+
+        // Append clones (for scrolling right)
+        items.forEach(item => {
+            const clone = item.cloneNode(true);
+            clone.dataset.clone = 'append';
+            track.appendChild(clone);
+        });
+
+        // Calculate proper initial position (middle of the carousel)
         setTimeout(() => {
-          track.style.transition = 'transform 0.5s ease-in-out';
+            const allItems = track.querySelectorAll('.pc');
+            const itemWidth = allItems[0].offsetWidth + 16; // Include gap
+            const initialPosition = itemWidth * items.length - 60; // Start at first original item
+            container.scrollLeft = initialPosition;
         }, 50);
-      }, 500);
-    }
-  }
 
-  function start() {
-    if (isMobile) {
-      intervalId = setInterval(next, 2000);
-    }
-  }
+        // Setup IntersectionObserver for active/near-active item detection
+        setupIntersectionObserver();
 
-  function stop() {
-    clearInterval(intervalId);
-  }
+        // Add event listeners
+        container.addEventListener('scroll', handleScroll, { passive: true });
+        container.addEventListener('touchstart', handleTouchStart, { passive: true });
+        container.addEventListener('touchend', handleTouchEnd, { passive: true });
+        container.addEventListener('mousedown', handleMouseDown, { passive: true });
+        container.addEventListener('mouseup', handleMouseUp, { passive: true });
+        container.addEventListener('mouseenter', handleMouseEnter, { passive: true });
+        container.addEventListener('mouseleave', handleMouseLeave, { passive: true });
 
-  function touchStart(index) {
-    return function(event) {
-      currentIndex = index;
-      startPos = getPositionX(event);
-      isDragging = true;
-      animationID = requestAnimationFrame(animation);
-      track.style.transition = 'none';
-      stop();
-    }
-  }
+        // Start auto-play after initial setup
+        setTimeout(() => {
+            startAutoPlay();
+        }, 1500);
 
-  function touchEnd() {
-    isDragging = false;
-    cancelAnimationFrame(animationID);
-    const movedBy = currentTranslate - prevTranslate;
+        isRunning = true;
+    };
 
-    if (movedBy < -100 && currentIndex < items.length - 1) currentIndex++;
-    if (movedBy > 100 && currentIndex > 0) currentIndex--;
+    const setupIntersectionObserver = () => {
+        activeObserver = new IntersectionObserver((entries) => {
+            const visibleItems = [];
 
-    setPositionByIndex();
-    track.style.transition = 'transform 0.5s ease-in-out';
-    start();
-  }
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    visibleItems.push({
+                        element: entry.target,
+                        ratio: entry.intersectionRatio
+                    });
+                }
+            });
 
-  function touchMove(event) {
-    if (isDragging) {
-      const currentPosition = getPositionX(event);
-      currentTranslate = prevTranslate + currentPosition - startPos;
-    }
-  }
+            // Sort by intersection ratio to find the most centered item
+            visibleItems.sort((a, b) => b.ratio - a.ratio);
 
-  function getPositionX(event) {
-    return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
-  }
+            // Clear all states
+            track.querySelectorAll('.pc').forEach(item => {
+                item.classList.remove('active', 'near-active');
+            });
 
-  function animation() {
-    setSliderPosition();
-    if (isDragging) requestAnimationFrame(animation);
-  }
+            // Set active item (most visible)
+            if (visibleItems[0]) {
+                visibleItems[0].element.classList.add('active');
 
-  function init() {
-    isMobile = window.innerWidth <= 900;
-    if (isMobile) {
-      setupCarousel();
-      setPositionByIndex();
-      updateCarousel();
-      start();
+                // Set near-active items (adjacent to active)
+                const activeIndex = Array.from(track.children).indexOf(visibleItems[0].element);
+                const prevItem = track.children[activeIndex - 1];
+                const nextItem = track.children[activeIndex + 1];
 
-      items.forEach((item, index) => {
-        item.addEventListener('touchstart', touchStart(index), {passive: true});
-        item.addEventListener('touchend', touchEnd, {passive: true});
-        item.addEventListener('touchmove', touchMove, {passive: true});
-        item.addEventListener('mousedown', touchStart(index));
-        item.addEventListener('mouseup', touchEnd);
-        item.addEventListener('mouseleave', touchEnd);
-        item.addEventListener('mousemove', touchMove);
-      });
-    } else {
-      stop();
-      track.style.transform = '';
-      items.forEach(item => item.classList.remove('active'));
-    }
-  }
+                if (prevItem) prevItem.classList.add('near-active');
+                if (nextItem) nextItem.classList.add('near-active');
+            }
+        }, {
+            root: container,
+            threshold: [0.3, 0.5, 0.7, 0.9]
+        });
 
-  init();
-  window.addEventListener('resize', init);
+        // Observe all items
+        track.querySelectorAll('.pc').forEach(item => {
+            activeObserver.observe(item);
+        });
+    };
+
+    let scrollEndTimer;
+    const handleScroll = () => {
+        // Pause auto-play on manual scroll
+        if (!isUserInteracting) {
+            pauseAutoPlay();
+        }
+
+        // Clear previous timer
+        clearTimeout(scrollEndTimer);
+
+        // Set new timer for scroll end detection
+        scrollEndTimer = setTimeout(() => {
+            if (!isTransitioning) {
+                handleInfiniteLoop();
+            }
+            if (!isUserInteracting) {
+                scheduleResume();
+            }
+        }, 100);
+    };
+
+    const handleInfiniteLoop = () => {
+        if (isTransitioning) return;
+
+        const scrollLeft = container.scrollLeft;
+        const items = Array.from(track.querySelectorAll('.pc:not([data-clone])'));
+        if (items.length === 0) return;
+
+        const itemWidth = items[0].offsetWidth + 16;
+        const totalOriginalWidth = itemWidth * items.length;
+
+        // Define boundaries
+        const leftBoundary = totalOriginalWidth - itemWidth;
+        const rightBoundary = totalOriginalWidth * 2;
+
+        // Check if we need to jump
+        if (scrollLeft < leftBoundary) {
+            // Scrolled too far left - jump forward
+            isTransitioning = true;
+            container.style.scrollBehavior = 'auto';
+            container.scrollLeft = scrollLeft + totalOriginalWidth;
+
+            requestAnimationFrame(() => {
+                container.style.scrollBehavior = 'smooth';
+                isTransitioning = false;
+            });
+        } else if (scrollLeft > rightBoundary) {
+            // Scrolled too far right - jump backward
+            isTransitioning = true;
+            container.style.scrollBehavior = 'auto';
+            container.scrollLeft = scrollLeft - totalOriginalWidth;
+
+            requestAnimationFrame(() => {
+                container.style.scrollBehavior = 'smooth';
+                isTransitioning = false;
+            });
+        }
+    };
+
+    const handleTouchStart = () => {
+        isUserInteracting = true;
+        pauseAutoPlay();
+    };
+
+    const handleTouchEnd = () => {
+        isUserInteracting = false;
+        scheduleResume();
+    };
+
+    const handleMouseDown = () => {
+        isUserInteracting = true;
+        pauseAutoPlay();
+    };
+
+    const handleMouseUp = () => {
+        isUserInteracting = false;
+        scheduleResume();
+    };
+
+    const handleMouseEnter = () => {
+        if (window.innerWidth > 768) { // Only on larger screens
+            pauseAutoPlay();
+        }
+    };
+
+    const handleMouseLeave = () => {
+        if (window.innerWidth > 768 && !isUserInteracting) {
+            scheduleResume();
+        }
+    };
+
+    const startAutoPlay = () => {
+        if (autoPlayInterval) return;
+
+        autoPlayInterval = setInterval(() => {
+            if (!isUserInteracting && !document.hidden && !isTransitioning) {
+                // Smooth advance to next item
+                const items = track.querySelectorAll('.pc');
+                if (items.length > 0) {
+                    const currentActive = track.querySelector('.pc.active');
+                    const itemWidth = items[0].offsetWidth + 16;
+
+                    // Use scrollTo for smoother animation
+                    container.scrollTo({
+                        left: container.scrollLeft + itemWidth,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        }, AUTO_PLAY_DELAY);
+    };
+
+    const pauseAutoPlay = () => {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+            autoPlayInterval = null;
+        }
+        if (resumeTimeout) {
+            clearTimeout(resumeTimeout);
+            resumeTimeout = null;
+        }
+    };
+
+    const scheduleResume = () => {
+        if (resumeTimeout) {
+            clearTimeout(resumeTimeout);
+        }
+
+        resumeTimeout = setTimeout(() => {
+            if (!isUserInteracting && !document.hidden) {
+                startAutoPlay();
+            }
+        }, RESUME_DELAY);
+    };
+
+    // Enhanced resize handler with better debouncing
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        // Pause during resize
+        pauseAutoPlay();
+        resizeTimer = setTimeout(() => {
+            setup();
+        }, 300);
+    });
+
+    // Handle visibility changes
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            pauseAutoPlay();
+        } else if (isRunning && !isUserInteracting) {
+            scheduleResume();
+        }
+    });
+
+    // Initialize
+    setup();
 })();

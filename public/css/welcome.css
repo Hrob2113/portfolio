@@ -88,41 +88,68 @@ nav.scrolled{
   transition:opacity .2s,transform .2s;
 }
 .n-cta:hover{opacity:.85;transform:scale(.97)}
-
 /* ── LANGUAGE TOGGLE — fixed top-right ── */
-.lang-toggle{
-  position:fixed;top:20px;right:20px;z-index:501;
-  display:flex;align-items:center;
-  background:rgba(8,22,30,.5);
-  backdrop-filter:blur(32px) saturate(160%);
-  -webkit-backdrop-filter:blur(32px) saturate(160%);
-  border:1px solid rgba(237,230,218,.1);
-  border-radius:var(--r-pill);
-  padding:2px;gap:0;
-  box-shadow:0 4px 20px rgba(0,0,0,.4);
+.lang-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 501;
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    background: rgba(8, 22, 30, .5);
+    backdrop-filter: blur(32px) saturate(160%);
+    -webkit-backdrop-filter: blur(32px) saturate(160%);
+    border: 1px solid rgba(237, 230, 218, .1);
+    border-radius: var(--r-pill);
+    padding: 2px;
+    gap: 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, .4);
 }
-.lang-toggle-track{
-  position:absolute;top:2px;left:2px;
-  width:calc(50% - 2px);height:calc(100% - 4px);
-  background:rgba(196,18,8,.7);
-  border-radius:var(--r-pill);
-  transition:transform .3s cubic-bezier(.4,0,.2,1);
-  pointer-events:none;z-index:0;
+
+.lang-toggle-track {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: calc(50% - 2px);
+    height: calc(100% - 4px);
+    background: rgba(196, 18, 8, .7);
+    border-radius: var(--r-pill);
+    transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+    pointer-events: none;
+    z-index: 0;
 }
-.lang-toggle[data-active="cs"] .lang-toggle-track{
-  transform:translateX(100%);
+
+.lang-toggle[data-active="cs"] .lang-toggle-track {
+    transform: translateX(100%);
 }
-.lang-btn{
-  position:relative;z-index:1;
-  font-family:var(--fm);font-size:10px;
-  letter-spacing:.08em;text-transform:uppercase;
-  color:var(--low);background:transparent;
-  border:none;cursor:pointer;
-  padding:5px 10px;border-radius:var(--r-pill);
-  transition:color .3s ease;
+
+.lang-btn {
+    position: relative;
+    z-index: 1;
+    font-family: var(--fm);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--low);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: var(--r-pill);
+    transition: color .3s ease;
 }
-.lang-btn:hover{color:var(--text)}
-.lang-btn.active{color:#f0e8e0}
+
+.lang-btn:hover { color: var(--text); }
+.lang-btn.active { color: #f0e8e0; }
+
+/* ── Mobile — move toggle to left side ── */
+@media (max-width: 768px) {
+    .lang-toggle {
+        right: auto;
+        left: 20px;
+    }
+}
 
 /* ── LOCALE TRANSITION OVERLAY ── */
 .locale-overlay{
@@ -979,8 +1006,25 @@ footer{position:relative;z-index:2}
   transition:opacity .15s ease,transform .15s ease;
 }
 
+/* ── Desktop: Grid Layout (no carousel) ── */
+@media (min-width: 1025px) {
+  .pg {
+    display: grid !important;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 200px;
+    gap: 10px;
+  }
+  .pg-track {
+    display: contents !important;
+  }
+  /* Hide any carousel-specific wrapper if it exists */
+  .carousel-container {
+    display: none !important;
+  }
+}
+
 /* ── RESPONSIVE ── */
-@media(max-width:900px){
+@media(max-width:1024px){
   body{cursor:auto}
   #cur,#cur-r{display:none}
   nav{padding:9px 9px 9px 18px;max-width:70vw}
@@ -1001,34 +1045,110 @@ footer{position:relative;z-index:2}
   .steps{grid-template-columns:1fr 1fr}
   footer{flex-direction:column;gap:12px;text-align:center;padding:26px 24px}
 
-  /* ── WORKS CAROUSEL (mobile) ── */
+  /* ── WORKS CAROUSEL (mobile/tablet) ── */
   .filter-bar{display:none}
-  .pg.carousel-container {
-    overflow: hidden;
+
+  /* Transform grid into carousel container */
+  .pg {
+    display: block !important;
+    position: relative;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    /* Padding for peek effect */
+    scroll-padding-inline: 60px;
   }
+  .pg::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Convert track to flex container */
   .pg-track {
-    display: flex;
+    display: flex !important;
     gap: 16px;
-    transition: transform 0.5s ease-in-out;
+    /* Padding for first/last item peek */
+    padding: 0 60px;
   }
-  .pg-track .pc {
-    flex: 0 0 82vw;
+
+  /* Transform portfolio cards into carousel items */
+  .pc {
+    flex-shrink: 0;
+    width: calc(100vw - 120px); /* Viewport minus peek space */
     height: 400px;
     scroll-snap-align: center;
-    border-radius: var(--r-lg);
-    transform: scale(0.85);
-    transition: transform 0.5s ease-in-out;
+    /* Remove grid-specific styles */
+    grid-column: unset !important;
+    grid-row: unset !important;
+    /* Reset filter animations */
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+    display: block !important;
+    transition: transform 0.3s ease;
   }
-  .pg-track .pc.active {
-    transform: scale(1);
+
+  /* Hide filter-based hiding classes */
+  .pc.hiding, .pc.hidden {
+    display: block !important;
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
   }
-  .pg-track .pc.hiding,.pg-track .pc.hidden{
-    display:block;opacity:1;transform:none;pointer-events:auto;
+
+  /* Active item emphasis with smooth scaling */
+  .pc.active {
+    transform: scale(1) translateZ(0) !important;
+    opacity: 1 !important;
+    filter: blur(0) !important;
+    z-index: 2;
   }
-  .pc-info{transform:none}
-  .pc-desc{opacity:1;transform:none}
-  .pc-tags{opacity:1}
-  .pc-arrow{display:none}
+
+  /* Near-active items (adjacent to active) */
+  .pc.near-active {
+    transform: scale(0.95) translateZ(0) !important;
+    opacity: 0.85 !important;
+    filter: blur(0.5px) !important;
+  }
+
+  /* Remove hover effects on mobile */
+  .pc:hover img {
+    transform: none;
+    filter: grayscale(25%) contrast(1.05) brightness(.82);
+  }
+  .pc:hover .pc-ov {
+    background: linear-gradient(to top, rgba(6,18,24,.92) 0%, rgba(6,18,24,.35) 45%, transparent 72%);
+  }
+  .pc:hover .pc-info {
+    transform: none;
+  }
+
+  /* Always show card content on mobile */
+  .pc-info {
+    transform: none !important;
+  }
+  .pc-desc {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .pc-tags {
+    opacity: 1 !important;
+  }
+  .pc:hover .pc-desc {
+    opacity: 1;
+    transform: none;
+  }
+  .pc:hover .pc-tags {
+    opacity: 1;
+  }
+  .pc:hover .pc-arrow {
+    opacity: 0;
+    transform: scale(.7);
+  }
+  .pc-arrow {
+    display: none;
+  }
 
   /* ── CONTACT FORM MOBILE ── */
   .cf-anchor{width:100%}
@@ -1075,9 +1195,16 @@ footer{position:relative;z-index:2}
   .ab-ghost{font-size:80px;top:-10px;right:-20px}
 }
 
+/* Tablet-specific adjustments (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pg.carousel-active .pg-track .pc {
+    width: calc(50% - 8px); /* Two items visible, accounting for 16px gap */
+  }
+}
+
 @media(max-width:480px){
   .h-name{font-size:clamp(60px,18vw,120px)}
-  .pg-track .pc{flex:0 0 88vw;height:360px}
+  .pg.carousel-active .pg-track .pc{width: 88vw;height:360px}
   .ct-hed{font-size:clamp(42px,14vw,80px)}
   .ct-email{font-size:clamp(16px,5vw,28px)}
   .works-top{flex-direction:column;align-items:flex-start;gap:12px}

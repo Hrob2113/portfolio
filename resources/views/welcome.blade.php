@@ -151,8 +151,8 @@ requestAnimationFrame(()=>{
     <div class="sk-group">
       <span class="sk-head">{{ __('stack.frontend') }}</span>
       <div class="sk-list">
-        <span class="sk-item sk-item--hi">React</span>
         <span class="sk-item sk-item--hi">Livewire</span>
+        <span class="sk-item sk-item--hi">Alpine js</span>
         <span class="sk-item">Tailwind CSS</span>
         <span class="sk-item">TypeScript</span>
       </div>
@@ -162,7 +162,7 @@ requestAnimationFrame(()=>{
       <div class="sk-list">
         <span class="sk-item sk-item--hi">Figma</span>
         <span class="sk-item sk-item--hi">Adobe CC</span>
-        <span class="sk-item">Motion Graphics</span>
+        <span class="sk-item">Blender</span>
         <span class="sk-item">Brand Systems</span>
       </div>
     </div>
@@ -196,35 +196,37 @@ requestAnimationFrame(()=>{
     <button class="f-btn" data-filter="ui">{{ __('works.filterUi') }}</button>
   </div>
 
-  <div class="pg rv carousel-container" style="transition-delay:.18s" id="portfolio-grid">
+  <div class="pg rv" style="transition-delay:.18s" id="portfolio-grid">
     <div class="pg-track">
 
     <!-- 1: Featured web -->
-    <div class="pc pc--featured" data-cat="web">
-      <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&fit=crop&q=75" alt="Archivos" loading="lazy" decoding="async">
-      <div class="pc-ov"></div>
-      <div class="pc-arrow">→</div>
-      <span class="pc-yr">2024</span>
-      <div class="pc-info">
-        <span class="pc-cat">{{ __('card.archivos.cat') }}</span>
-        <div class="pc-title">ARCHIVOS</div>
-        <p class="pc-desc">{{ __('card.archivos.desc') }}</p>
-        <div class="pc-tags">
-          <span class="pc-tag">Laravel</span><span class="pc-tag">React</span><span class="pc-tag">AI/ML</span>
-        </div>
-      </div>
-    </div>
+        <a href="https://www.kavarnalouny.cz/" target="_blank" rel="noopener noreferrer"
+           class="pc pc--featured" data-cat="web">
+            <img src="{{ asset('skald.png') }}" alt="Skald" loading="lazy" decoding="async">
+            <div class="pc-ov"></div>
+            <div class="pc-arrow">→</div>
+            <span class="pc-yr">2026</span>
+            <div class="pc-info">
+                <span class="pc-cat">{{ __('card.skald.cat') }}</span>
+                <div class="pc-title">SKALD COFFEE</div>
+                <p class="pc-desc">{{ __('card.skald.desc') }}</p>
+                <div class="pc-tags">
+                    <span class="pc-tag">Laravel</span><span class="pc-tag">Tailwind CSS</span><span class="pc-tag">JS</span>
+                </div>
+            </div>
+        </a>
 
-    <!-- 2: Tall brand -->
+
+        <!-- 2: Tall brand -->
     <div class="pc pc--tall" data-cat="brand">
-      <img src="https://images.unsplash.com/photo-1634986666676-ec8fd927c23d?w=800&auto=format&fit=crop&q=75" alt="Vela Brand" loading="lazy" decoding="async">
+      <img src="{{ asset('med-kvetovy.png') }}" alt="Med - Květový" loading="lazy" decoding="async">
       <div class="pc-ov"></div>
       <div class="pc-arrow">→</div>
       <span class="pc-yr">2024</span>
       <div class="pc-info">
-        <span class="pc-cat">{{ __('card.vela.cat') }}</span>
-        <div class="pc-title">VELA STUDIO</div>
-        <p class="pc-desc">{{ __('card.vela.desc') }}</p>
+        <span class="pc-cat">{{ __('card.med.cat') }}</span>
+        <div class="pc-title">Med Květový</div>
+        <p class="pc-desc">{{ __('card.med.desc') }}</p>
         <div class="pc-tags">
           <span class="pc-tag">Logo</span><span class="pc-tag">Typography</span><span class="pc-tag">Print</span>
         </div>
@@ -233,65 +235,65 @@ requestAnimationFrame(()=>{
 
     <!-- 3: Wide UI -->
     <div class="pc pc--wide" data-cat="ui">
-      <img src="https://images.unsplash.com/photo-1487017159836-4e23ece2e4cf?w=1200&auto=format&fit=crop&q=75" alt="Reflex" loading="lazy" decoding="async">
+      <img src="{{ asset('studio-pebe.webp') }}" alt="Reflex" loading="lazy" decoding="async">
       <div class="pc-ov"></div>
       <div class="pc-arrow">→</div>
-      <span class="pc-yr">2023</span>
+      <span class="pc-yr">2025</span>
       <div class="pc-info">
-        <span class="pc-cat">{{ __('card.reflex.cat') }}</span>
-        <div class="pc-title">REFLEX ANALYTICS</div>
-        <p class="pc-desc">{{ __('card.reflex.desc') }}</p>
+        <span class="pc-cat">{{ __('card.pebe.cat') }}</span>
+        <div class="pc-title">BEATY STUDIO PeBe</div>
+        <p class="pc-desc">{{ __('card.pebe.desc') }}</p>
         <div class="pc-tags">
-          <span class="pc-tag">Figma</span><span class="pc-tag">Prototype</span><span class="pc-tag">Design System</span>
+          <span class="pc-tag">Frontend</span><span class="pc-tag">Prototype</span><span class="pc-tag">Design System</span>
         </div>
       </div>
     </div>
 
     <!-- 4: Square graphic -->
     <div class="pc pc--sq" data-cat="graphic">
-      <img src="https://images.unsplash.com/photo-1547891654-e66ed7ebb968?w=800&auto=format&fit=crop&q=75" alt="Poster Series" loading="lazy" decoding="async">
+      <img src="{{ asset('skald-ilustrations.png') }}" alt="Skald ilustrations" loading="lazy" decoding="async">
       <div class="pc-ov"></div>
       <div class="pc-arrow">→</div>
-      <span class="pc-yr">2024</span>
+      <span class="pc-yr">2026</span>
       <div class="pc-info">
         <span class="pc-cat">{{ __('card.signal.cat') }}</span>
-        <div class="pc-title">SIGNAL SERIES</div>
+        <div class="pc-title">SKALD COFFEE ILUSTRATIONS</div>
         <p class="pc-desc">{{ __('card.signal.desc') }}</p>
         <div class="pc-tags">
-          <span class="pc-tag">Poster</span><span class="pc-tag">Print</span>
+          <span class="pc-tag">Artwork</span><span class="pc-tag">Print</span>
         </div>
       </div>
     </div>
 
-{{--    <!-- 5: Wide web -->--}}
-{{--    <div class="pc pc--wide2" data-cat="web">--}}
-{{--      <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=1200&auto=format&fit=crop&q=75" alt="Kasida" loading="lazy" decoding="async">--}}
-{{--      <div class="pc-ov"></div>--}}
-{{--      <div class="pc-arrow">→</div>--}}
-{{--      <span class="pc-yr">2024</span>--}}
-{{--      <div class="pc-info">--}}
-{{--        <span class="pc-cat">{{ __('card.kasida.cat') }}</span>--}}
-{{--        <div class="pc-title">KASIDA SHOP</div>--}}
-{{--        <p class="pc-desc">{{ __('card.kasida.desc') }}</p>--}}
-{{--        <div class="pc-tags">--}}
-{{--          <span class="pc-tag">Laravel</span><span class="pc-tag">Livewire</span><span class="pc-tag">Stripe</span>--}}
-{{--        </div>--}}
-{{--      </div>--}}
-{{--    </div>--}}
+    <!-- 5: Wide web -->
+    <div class="pc pc--wide2" data-cat="ui">
+      <img src="{{ asset('hokejova-skola.png') }}" alt="hokejova-skola" loading="lazy" decoding="async">
+      <div class="pc-ov"></div>
+      <div class="pc-arrow">→</div>
+      <span class="pc-yr">2022</span>
+      <div class="pc-info">
+        <span class="pc-cat">{{ __('card.kasida.cat') }}</span>
+        <div class="pc-title">HOKEJOVÁ ŠKOLA RADKA GARDONĚ</div>
+        <p class="pc-desc">{{ __('card.kasida.desc') }}</p>
+        <div class="pc-tags">
+          <span class="pc-tag">Figma</span><span class="pc-tag">UX/UI</span>
+        </div>
+      </div>
+    </div>
 
-{{--    <!-- 6: Gradient text card -->--}}
-{{--    <div class="pc pc--sq2" data-cat="graphic">--}}
-{{--      <div class="pc-grad" style="background:radial-gradient(ellipse 80% 80% at 30% 70%, rgba(232,64,32,.7) 0%, rgba(20,80,100,.5) 55%, transparent 80%),radial-gradient(ellipse 60% 60% at 80% 20%, rgba(26,80,96,.6) 0%, transparent 65%)"></div>--}}
-{{--      <div class="pc-big-word">TYPE</div>--}}
-{{--      <div class="pc-text-body">--}}
-{{--        <span class="pc-cat">{{ __('card.type.cat') }}</span>--}}
-{{--        <div class="pc-title">TYPE STUDIES</div>--}}
-{{--        <p class="pc-desc">{{ __('card.type.desc') }}</p>--}}
-{{--        <div class="pc-tags" style="opacity:1;margin-top:10px">--}}
-{{--          <span class="pc-tag">Editorial</span><span class="pc-tag">Experimental</span>--}}
-{{--        </div>--}}
-{{--      </div>--}}
-{{--    </div>--}}
+    <!-- 6: Gradient text card -->
+    <div class="pc pc--sq2" data-cat="graphic">
+      <div class="pc-grad" style="background:radial-gradient(ellipse 80% 80% at 30% 70%, rgba(232,64,32,.7) 0%, rgba(20,80,100,.5) 55%, transparent 80%),radial-gradient(ellipse 60% 60% at 80% 20%, rgba(26,80,96,.6) 0%, transparent 65%)"></div>
+      <div class="pc-big-word">TYPE</div>
+      <div class="pc-text-body">
+        <span class="pc-cat">{{ __('card.type.cat') }}</span>
+        <div class="pc-title">TYPE STUDIES</div>
+        <p class="pc-desc">{{ __('card.type.desc') }}</p>
+        <div class="pc-tags" style="opacity:1;margin-top:10px">
+          <span class="pc-tag">Editorial</span><span class="pc-tag">Experimental</span>
+        </div>
+      </div>
+    </div>
 
 {{--    <!-- 7: Half UI -->--}}
 {{--    <div class="pc pc--half" data-cat="ui">--}}
@@ -376,11 +378,7 @@ requestAnimationFrame(()=>{
       <div class="ab-ghost" aria-hidden="true">ROBIN</div>
       <div class="ab-port">
           <img src="{{ asset('robin.jpeg') }}" alt="Robin Hrdlicka" loading="lazy" decoding="async">
-        <div class="ab-float">
-          <span class="bdg bdg-h"><span class="bdg-d"></span><span>{{ __('about.badge1') }}</span></span>
-          <span class="bdg"><span class="bdg-d"></span><span>{{ __('about.badge2') }}</span></span>
-          <span class="bdg"><span class="bdg-d"></span><span>{{ __('about.badge3') }}</span></span>
-        </div>
+
       </div>
     </div>
     <div class="rr">
@@ -392,8 +390,6 @@ requestAnimationFrame(()=>{
       <div class="bdg-row">
         <div class="bdg"><span class="bdg-d"></span><span>{{ __('about.bdg1') }}</span></div>
         <div class="bdg bdg-h"><span class="bdg-d"></span><span>{{ __('about.bdg2') }}</span></div>
-        <div class="bdg"><span class="bdg-d"></span><span>{{ __('about.bdg3') }}</span></div>
-        <div class="bdg"><span class="bdg-d"></span><span>{{ __('about.bdg4') }}</span></div>
       </div>
     </div>
   </div>
@@ -420,7 +416,7 @@ requestAnimationFrame(()=>{
     <div class="ct-eye">{{ __('contact.eye') }}</div>
     <h2 class="ct-hed">{!! __('contact.heading') !!}</h2>
     <p class="ct-sub">{{ __('contact.sub') }}</p>
-    <a href="mailto:{{ $settings['contact_email'] ?? 'hello@robinhrdlicka.dev' }}" class="ct-email">{{ $settings['contact_email'] ?? 'hello@robinhrdlicka.dev' }}</a>
+    <a href="mailto:{{ $settings['contact_email'] ?? 'robinhrdlickadev@gmail.com' }}" class="ct-email">{{ $settings['contact_email'] ?? 'robinhrdlickadev@gmail.com' }}</a>
     <div class="cf-anchor" id="cf-anchor">
       <div class="cf-popup" id="cf-popup">
         <div class="cf-accent"></div>
