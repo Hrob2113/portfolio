@@ -234,7 +234,7 @@ requestAnimationFrame(()=>{
     </div>
 
     <!-- 3: Wide UI -->
-    <div class="pc pc--wide" data-cat="ui">
+    <a href="https://www.studio-pebe.cz/" target="_blank" rel="noopener noreferrer" class="pc pc--wide" data-cat="ui">
       <img src="{{ asset('studio-pebe.webp') }}" alt="Reflex" loading="lazy" decoding="async">
       <div class="pc-ov"></div>
       <div class="pc-arrow">→</div>
@@ -247,7 +247,7 @@ requestAnimationFrame(()=>{
           <span class="pc-tag">Frontend</span><span class="pc-tag">Prototype</span><span class="pc-tag">Design System</span>
         </div>
       </div>
-    </div>
+    </a>
 
     <!-- 4: Square graphic -->
     <div class="pc pc--sq" data-cat="graphic">
@@ -281,19 +281,19 @@ requestAnimationFrame(()=>{
       </div>
     </div>
 
-    <!-- 6: Gradient text card -->
-    <div class="pc pc--sq2" data-cat="graphic">
-      <div class="pc-grad" style="background:radial-gradient(ellipse 80% 80% at 30% 70%, rgba(232,64,32,.7) 0%, rgba(20,80,100,.5) 55%, transparent 80%),radial-gradient(ellipse 60% 60% at 80% 20%, rgba(26,80,96,.6) 0%, transparent 65%)"></div>
-      <div class="pc-big-word">TYPE</div>
-      <div class="pc-text-body">
-        <span class="pc-cat">{{ __('card.type.cat') }}</span>
-        <div class="pc-title">TYPE STUDIES</div>
-        <p class="pc-desc">{{ __('card.type.desc') }}</p>
-        <div class="pc-tags" style="opacity:1;margin-top:10px">
-          <span class="pc-tag">Editorial</span><span class="pc-tag">Experimental</span>
-        </div>
-      </div>
-    </div>
+{{--    <!-- 6: Gradient text card -->--}}
+{{--    <div class="pc pc--sq2" data-cat="graphic">--}}
+{{--      <div class="pc-grad" style="background:radial-gradient(ellipse 80% 80% at 30% 70%, rgba(232,64,32,.7) 0%, rgba(20,80,100,.5) 55%, transparent 80%),radial-gradient(ellipse 60% 60% at 80% 20%, rgba(26,80,96,.6) 0%, transparent 65%)"></div>--}}
+{{--      <div class="pc-big-word">TYPE</div>--}}
+{{--      <div class="pc-text-body">--}}
+{{--        <span class="pc-cat">{{ __('card.type.cat') }}</span>--}}
+{{--        <div class="pc-title">TYPE STUDIES</div>--}}
+{{--        <p class="pc-desc">{{ __('card.type.desc') }}</p>--}}
+{{--        <div class="pc-tags" style="opacity:1;margin-top:10px">--}}
+{{--          <span class="pc-tag">Editorial</span><span class="pc-tag">Experimental</span>--}}
+{{--        </div>--}}
+{{--      </div>--}}
+{{--    </div>--}}
 
 {{--    <!-- 7: Half UI -->--}}
 {{--    <div class="pc pc--half" data-cat="ui">--}}

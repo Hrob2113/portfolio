@@ -481,7 +481,7 @@ section{position:relative}
 .sc:hover::before{opacity:1}
 .sc-icon{font-family:var(--fm);font-size:20px;background:linear-gradient(95deg,#C41208 0%,#003C52 100%);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:18px;display:block}
 .sc-name{font-family:var(--fd);font-weight:800;font-size:24px;letter-spacing:.03em;color:var(--text);margin-bottom:10px}
-.sc-desc{font-size:14px;font-weight:300;color:var(--low);line-height:1.75}
+.sc-desc{font-size:14px;font-weight:300;color:var(--mid);line-height:1.75}
 
 /* ── ABOUT ── */
 #about{padding:120px 60px;border-top:1px solid var(--border)}
@@ -591,7 +591,7 @@ section{position:relative}
   line-height:1;margin-bottom:14px;display:block;
 }
 .st-name{font-family:var(--fd);font-weight:800;font-size:22px;letter-spacing:.04em;color:var(--text);margin-bottom:10px}
-.st-desc{font-size:13px;font-weight:300;color:var(--low);line-height:1.72}
+.st-desc{font-size:13px;font-weight:300;color:var(--mid);line-height:1.72}
 
 /* ── CONTACT ── */
 #contact{padding:120px 60px;border-top:1px solid var(--border);position:relative;overflow:hidden}
@@ -1043,6 +1043,11 @@ footer{position:relative;z-index:2}
   .h-scroll{display:none}
   .sv-wrap,.ab-wrap{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr 1fr}
+  .st{border-radius:0}
+  .st:first-child{border-radius:24px 0 0 0}
+  .st:nth-child(2){border-radius:0 24px 0 0}
+  .st:nth-child(3){border-radius:0 0 0 24px}
+  .st:last-child{border-radius:0 0 24px 0}
   footer{flex-direction:column;gap:12px;text-align:center;padding:26px 24px}
 
   /* ── WORKS CAROUSEL (mobile/tablet) ── */
@@ -1187,6 +1192,9 @@ footer{position:relative;z-index:2}
 
   /* ── PROCESS STEPS (mobile) ── */
   .steps{grid-template-columns:1fr}
+  .st,
+  .st:nth-child(2),
+  .st:nth-child(3){border-radius:0}
   .st:first-child{border-radius:24px 24px 0 0}
   .st:last-child{border-radius:0 0 24px 24px}
 
