@@ -84,7 +84,7 @@ float snoise(vec3 v){
 
 float fbm(vec3 p){
     float v=0.0,a=0.5,f=1.0;
-    for(int i=0;i<4;i++){v+=a*snoise(p*f);f*=2.0;a*=0.5;}
+    for(int i=0;i<3;i++){v+=a*snoise(p*f);f*=2.0;a*=0.5;}
     return v;
 }
 
@@ -319,7 +319,10 @@ try {
     uniforms.uLogoSize.value.set(mr.width * dpr, mr.height * dpr);
   }
   updateLogoPos();
-  window.addEventListener('scroll', updateLogoPos, { passive: true });
+  let logoRaf = false;
+  window.addEventListener('scroll', () => {
+    if (!logoRaf) { logoRaf = true; requestAnimationFrame(() => { updateLogoPos(); logoRaf = false; }); }
+  }, { passive: true });
 
   /* Pause Three.js rendering when hero is not visible */
   let heroVisible = true;
@@ -331,16 +334,22 @@ try {
     heroObs.observe(heroEl);
   }
 
-  (function animate() {
+  /* Throttle WebGL to ~30fps — heavy fragment shader doesn't need 60fps */
+  let lastFrame = 0;
+  const frameBudget = 1000 / 30;
+
+  (function animate(ts) {
     requestAnimationFrame(animate);
     if (!heroVisible || document.hidden) return;
+    if (ts - lastFrame < frameBudget) return;
+    lastFrame = ts;
     uniforms.uTime.value = (performance.now() - startTime) / 1000;
     const lerp = decayLerp();
     mouseCurrent.x += (mouseTarget.x - mouseCurrent.x) * lerp;
     mouseCurrent.y += (mouseTarget.y - mouseCurrent.y) * lerp;
     uniforms.uMouse.value.set(mouseCurrent.x, mouseCurrent.y);
     renderer.render(scene, camera);
-  })();
+  })(0);
 } catch(e) {
   console.warn('Three.js shader failed to load', e);
 }

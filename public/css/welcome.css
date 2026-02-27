@@ -1122,8 +1122,11 @@ footer{position:relative;z-index:2}
     transform: none;
     filter: grayscale(25%) contrast(1.05) brightness(.82);
   }
+  .pc-ov {
+    background: linear-gradient(to top, rgba(6,18,24,.99) 0%, rgba(6,18,24,.92) 30%, rgba(6,18,24,.65) 55%, rgba(6,18,24,.25) 75%, transparent 90%);
+  }
   .pc:hover .pc-ov {
-    background: linear-gradient(to top, rgba(6,18,24,.92) 0%, rgba(6,18,24,.35) 45%, transparent 72%);
+    background: linear-gradient(to top, rgba(6,18,24,.99) 0%, rgba(6,18,24,.92) 30%, rgba(6,18,24,.65) 55%, rgba(6,18,24,.25) 75%, transparent 90%);
   }
   .pc:hover .pc-info {
     transform: none;

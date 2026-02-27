@@ -120,11 +120,10 @@
 
   function drawSunSlices(time,heroFade=1){
     const N=9;
-    const sx=W*.8, sy=H*.8, baseW=W*.2, bandH=H*.02, stride=H*.05;
+    const sx=W*.8, sy=H*.8, baseW=W*.22, bandH=H*.03, stride=H*.05;
     const shimmer=(.70+.30*Math.sin(time*1.35))*heroFade;
     cx.save();
     cx.globalCompositeOperation='screen';
-    cx.filter='blur(11px)';
     for(let i=0;i<N;i++){
       const d=Math.abs(i-(N-1)/2)/((N-1)/2);
       const scale=1-d*.44;
@@ -158,7 +157,7 @@
 
   /* ── Film grain — pre-baked patterns (avoid createPattern per frame) ── */
   const grainPatterns=(function(){
-    const N=8,S=256;
+    const N=4,S=128;
     return Array.from({length:N},()=>{
       const gc=document.createElement('canvas');
       gc.width=gc.height=S;
@@ -176,7 +175,7 @@
   })();
 
   function drawGrain(time){
-    const pat=grainPatterns[Math.floor(time*14)%grainPatterns.length];
+    const pat=grainPatterns[Math.floor(time*6)%grainPatterns.length];
     if(!pat) return;
     cx.save();
     cx.globalAlpha=.48;
@@ -216,14 +215,20 @@
   let mx=0,my=0,crx=0,cry=0;
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY},{passive:true});
 
-  /* ── Logo turbulence refs ── */
-  const turb=document.getElementById('logo-turb');
-  const turbBase=0.015,turbDrift=0.008,turbSpeed=0.12;
+  /* ── Pause canvas when hero not visible ── */
+  let heroVisible=true;
+  const heroEl=document.getElementById('hero');
+  if(heroEl){
+    const heroObs=new IntersectionObserver(([entry])=>{
+      heroVisible=entry.isIntersecting;
+    },{threshold:0,rootMargin:'200px'});
+    heroObs.observe(heroEl);
+  }
 
   /* ══════════════════════════════════════════════════
      SINGLE rAF LOOP — canvas BG + cursor + logo distortion
   ═══════════════════════════════════════════════════ */
-  let last=0,time=0,tabVisible=true;
+  let last=0,time=0,tabVisible=true,frameBudget=1000/30,lastDraw=0;
   document.addEventListener('visibilitychange',()=>{tabVisible=!document.hidden},{passive:true});
 
   function mainLoop(ts){
@@ -231,20 +236,16 @@
     if(!tabVisible) return;
     const dt=Math.min((ts-last)/1000,.05); last=ts; time+=dt;
 
-    /* ── Cursor (transform3d — no layout thrashing) ── */
+    /* ── Cursor (transform3d — no layout thrashing, always 60fps) ── */
     crx+=(mx-crx)*.13; cry+=(my-cry)*.13;
     curEl.style.transform=`translate3d(${mx-4.5}px,${my-4.5}px,0)`;
     curR.style.transform=`translate3d(${crx-15}px,${cry-15}px,0)`;
 
-    /* ── Logo SVG turbulence ── */
-    if(turb){
-      const tt=ts/1000*turbSpeed;
-      const bx=turbBase+Math.sin(tt)*turbDrift;
-      const by=turbBase+Math.cos(tt*0.7)*turbDrift;
-      turb.setAttribute('baseFrequency',bx.toFixed(4)+' '+by.toFixed(4));
-    }
+    /* ── Canvas BG draw — skip when not visible or throttle to ~30fps ── */
+    if(!heroVisible) return;
+    if(ts-lastDraw<frameBudget) return;
+    lastDraw=ts;
 
-    /* ── Canvas BG draw ── */
     scrollT+=(targetT-scrollT)*.012;
     const t=Math.max(0,Math.min(1,scrollT));
     const seg=t*(KF.length-1);
