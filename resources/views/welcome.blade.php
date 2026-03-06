@@ -454,7 +454,7 @@ requestAnimationFrame(()=>{
       <button type="button" class="btn-ct" id="open-cf">{{ __('contact.writeBtn') }}</button>
     </div>
     <div class="so-links">
-      <a href="{{ $settings['github_url'] ?? '#' }}" target="_blank" rel="noopener">GitHub</a><a href="{{ $settings['linkedin_url'] ?? '#' }}" target="_blank" rel="noopener">LinkedIn</a><a href="{{ $settings['dribbble_url'] ?? '#' }}" target="_blank" rel="noopener">Dribbble</a><a href="{{ $settings['twitter_url'] ?? '#' }}" target="_blank" rel="noopener">Twitter / X</a>
+      <a href="{{ $settings['github_url'] ?? '#' }}" target="_blank" rel="noopener">GitHub</a><a href="{{ $settings['linkedin_url'] ?? '#' }}" target="_blank" rel="noopener">LinkedIn</a>
     </div>
     <div class="ct-sign">{{ __('contact.sign') }}</div>
   </div>
@@ -472,6 +472,10 @@ requestAnimationFrame(()=>{
         <line x1="2" y1="41" x2="30" y2="41"/>
       </svg>
       <span>HROB</span>&ensp;<span style="color:var(--low)">/ Robin Hrdlicka</span>
+    </div>
+    <div class="ft-links">
+      <a href="https://github.com/Hrob2113" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/robin-hrdli%C4%8Dka-653a22351/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
     <div class="ft-copy">{{ __('footer.copy') }}</div>
     <a href="#hero" class="ft-top">{{ __('footer.top') }}</a>

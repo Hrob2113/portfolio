@@ -870,6 +870,9 @@ footer>*{position:relative;z-index:1}
 .ft-copy{font-family:var(--fm);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(237,230,218,.2)}
 .ft-top{font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--low);display:flex;align-items:center;gap:6px;transition:color .2s}
 .ft-top:hover{color:var(--text)}
+.ft-links{display:flex;gap:16px;font-family:var(--fm);font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+.ft-links a{color:var(--low);transition:color .2s}
+.ft-links a:hover{color:var(--text)}
 
 
 /* ── SECTION BACKGROUNDS: hero stays clear, stack onward gets darkened ── */
