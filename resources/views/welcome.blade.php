@@ -4,12 +4,117 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="csrf-token" content="{{ csrf_token() }}">
-<title>Robin Hrdlicka — Developer</title>
+
+@if(app()->getLocale() === 'cs')
+<title>Robin Hrdlička — Tvorba webů Louny | Web Developer & Designer</title>
+<meta name="description" content="Tvorba webových stránek a aplikací v Lounech. Robin Hrdlička — full-stack vývojář a designer. Laravel, moderní design, rychlé dodání. Dostupný pro nové projekty.">
+<meta name="keywords" content="Robin Hrdlička, tvorba webů Louny, webdesign Louny, web developer Louny, webové stránky Louny, Laravel developer, PHP vývojář, Ústecký kraj, full-stack vývojář">
+@else
+<title>Robin Hrdlička — Web Design & Development, Louny</title>
+<meta name="description" content="Web design and development based in Louny, Czech Republic. Robin Hrdlička — full-stack developer & designer specialising in Laravel, Livewire, and modern interfaces.">
+<meta name="keywords" content="Robin Hrdlička, web design Louny, web developer Louny, webdesign Louny, Laravel developer, full-stack developer Czech Republic, Ústí nad Labem region, portfolio">
+@endif
+<meta name="author" content="Robin Hrdlička">
+<meta name="robots" content="index, follow">
+
+<link rel="canonical" href="{{ url('/') }}">
+
+<link rel="alternate" hreflang="cs" href="{{ url('/') }}">
+<link rel="alternate" hreflang="en" href="{{ url('/') }}">
+<link rel="alternate" hreflang="x-default" href="{{ url('/') }}">
+
+<meta name="geo.region" content="CZ-US">
+<meta name="geo.placename" content="Louny">
+<meta name="geo.position" content="50.3571;13.7993">
+<meta name="ICBM" content="50.3571, 13.7993">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="{{ app()->getLocale() === 'cs' ? 'cs_CZ' : 'en_US' }}">
+<meta property="og:locale:alternate" content="{{ app()->getLocale() === 'cs' ? 'en_US' : 'cs_CZ' }}">
+<meta property="og:url" content="{{ url('/') }}">
+@if(app()->getLocale() === 'cs')
+<meta property="og:title" content="Robin Hrdlička — Tvorba webů Louny | Web Developer & Designer">
+<meta property="og:description" content="Tvorba webových stránek a aplikací v Lounech. Full-stack vývojář a designer. Laravel, moderní design, rychlé dodání.">
+@else
+<meta property="og:title" content="Robin Hrdlička — Web Design & Development, Louny">
+<meta property="og:description" content="Web design and development based in Louny, Czech Republic. Full-stack developer & designer specialising in Laravel and modern interfaces.">
+@endif
+<meta property="og:image" content="{{ asset('robin-2.jpg') }}">
+<meta property="og:image:alt" content="Robin Hrdlička — Full-Stack Developer & Designer">
+<meta property="og:site_name" content="Robin Hrdlička">
+
+@if(app()->getLocale() === 'cs')
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Robin Hrdlička — Tvorba webů Louny">
+<meta name="twitter:description" content="Tvorba webových stránek a aplikací v Lounech. Full-stack vývojář a designer.">
+@else
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Robin Hrdlička — Web Design & Development, Louny">
+<meta name="twitter:description" content="Web design and development based in Louny, Czech Republic. Full-stack developer & designer.">
+@endif
+<meta name="twitter:image" content="{{ asset('robin-2.jpg') }}">
+<meta name="twitter:image:alt" content="Robin Hrdlička — Full-Stack Developer & Designer">
+
+<link rel="sitemap" type="application/xml" href="{{ url('/sitemap.xml') }}">
+
 <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;0,900;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/welcome.css') }}?v={{ filemtime(public_path('css/welcome.css')) }}">
+
+<script type="application/ld+json">
+[
+  {
+    "@@context": "https://schema.org",
+    "@@type": "Person",
+    "name": "Robin Hrdlička",
+    "url": "{{ url('/') }}",
+    "jobTitle": "Full-Stack Developer & Designer",
+    "email": "{{ $settings['contact_email'] ?? 'robinhrdlickadev@gmail.com' }}",
+    "address": {
+      "@@type": "PostalAddress",
+      "addressLocality": "Louny",
+      "addressRegion": "Ústecký kraj",
+      "addressCountry": "CZ"
+    },
+    "knowsAbout": ["Laravel", "PHP", "Livewire", "Alpine.js", "Tailwind CSS", "TypeScript", "PostgreSQL", "Redis", "Figma", "Adobe Creative Cloud"],
+    "sameAs": [
+      "{{ $settings['github_url'] ?? 'https://github.com/Hrob2113' }}",
+      "https://www.linkedin.com/in/robin-hrdli%C4%8Dka-653a22351/"
+    ]
+  },
+  {
+    "@@context": "https://schema.org",
+    "@@type": "LocalBusiness",
+    "name": "Robin Hrdlička — Web Design & Development",
+    "url": "{{ url('/') }}",
+    "email": "{{ $settings['contact_email'] ?? 'robinhrdlickadev@gmail.com' }}",
+    "address": {
+      "@@type": "PostalAddress",
+      "addressLocality": "Louny",
+      "addressRegion": "Ústecký kraj",
+      "addressCountry": "CZ"
+    },
+    "geo": {
+      "@@type": "GeoCoordinates",
+      "latitude": 50.3571,
+      "longitude": 13.7993
+    },
+    "areaServed": [
+      { "@@type": "City", "name": "Louny" },
+      { "@@type": "AdministrativeArea", "name": "Ústecký kraj" },
+      { "@@type": "Country", "name": "Česká republika" }
+    ],
+    "description": "Tvorba webových stránek a aplikací v Lounech. Full-stack vývojář a designer — Laravel, moderní design, rychlé dodání.",
+    "priceRange": "$$",
+    "sameAs": [
+      "{{ $settings['github_url'] ?? 'https://github.com/Hrob2113' }}",
+      "https://www.linkedin.com/in/robin-hrdli%C4%8Dka-653a22351/"
+    ]
+  }
+]
+</script>
 </head>
 <body>
 
@@ -19,8 +124,8 @@
 
 <canvas id="hero-neat" aria-hidden="true"></canvas>
 
-<!-- NAV -->
-<nav role="navigation">
+<header>
+<nav role="navigation" aria-label="Primary navigation">
   <a href="#hero" class="n-brand">
     <svg class="n-icon" viewBox="0 0 32 44" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path d="M6 41 L6 16 Q6 3 16 3 Q26 3 26 16 L26 41"/>
@@ -37,14 +142,13 @@
   </ul>
   <a href="#contact" class="n-cta">{{ __('nav.contact') }}</a>
 </nav>
+</header>
 
-<!-- MOBILE HAMBURGER -->
 <button class="ham" id="ham" aria-label="Menu">
   <span class="ham-line"></span>
   <span class="ham-line"></span>
 </button>
 
-<!-- MOBILE FULLSCREEN MENU -->
 <div class="mob-menu" id="mob-menu">
   <div class="mob-menu-bg" id="mob-menu-bg"></div>
   <div class="mob-menu-content">
@@ -97,18 +201,14 @@ requestAnimationFrame(()=>{
 
 <main>
 
-<!-- HERO -->
 <section id="hero">
   <div class="h-portrait">
     <div class="h-portrait-frame">
-      <img src="{{ asset('robin-2.jpg') }}" alt="Robin Hrdlicka" fetchpriority="high">
+      <img src="{{ asset('robin-2.jpg') }}" alt="Portrait of Robin Hrdlička, full-stack developer and designer" fetchpriority="high" width="600" height="800">
     </div>
   </div>
   <div class="h-mark" aria-hidden="true">
     <svg viewBox="0 0 32 44" fill="none" stroke-linecap="round" stroke-linejoin="round">
-
-
-      <!-- Main stroke -->
       <g filter="url(#logo-distort)" stroke="#ffffff" stroke-width="0.6" opacity="0.9">
         <path d="M6 41 L6 16 Q6 3 16 3 Q26 3 26 16 L26 41"/>
         <line x1="6" y1="25" x2="26" y2="25"/>
@@ -117,10 +217,10 @@ requestAnimationFrame(()=>{
       </g>
     </svg>
   </div>
-  <div class="h-name" aria-label="Robin Hrdlička">
+  <h1 class="h-name" aria-label="Robin Hrdlička">
     <span class="h-a">ROBIN</span>
     <span class="h-c">HRDLIČKA</span>
-  </div>
+  </h1>
   <div class="h-foot">
     <div class="h-copy rv">
       <h2>{{ __('hero.tagline') }}</h2>
@@ -136,7 +236,6 @@ requestAnimationFrame(()=>{
   </div>
 </section>
 
-<!-- STACK -->
 <section id="stack">
   <div class="sk-inner">
     <div class="sk-group">
@@ -178,7 +277,6 @@ requestAnimationFrame(()=>{
   </div>
 </section>
 
-<!-- WORKS -->
 <section id="works">
   <div class="works-top rv">
     <div>
@@ -199,10 +297,9 @@ requestAnimationFrame(()=>{
   <div class="pg rv" style="transition-delay:.18s" id="portfolio-grid">
     <div class="pg-track">
 
-    <!-- 1: Featured web -->
         <a href="https://www.kavarnalouny.cz/" target="_blank" rel="noopener noreferrer"
            class="pc pc--featured" data-cat="web">
-            <img src="{{ asset('skald.png') }}" alt="Skald" loading="lazy" decoding="async">
+            <img src="{{ asset('skald.png') }}" alt="Skald Coffee — website screenshot" loading="lazy" decoding="async">
             <div class="pc-ov"></div>
             <div class="pc-arrow">→</div>
             <span class="pc-yr">2026</span>
@@ -216,8 +313,6 @@ requestAnimationFrame(()=>{
             </div>
         </a>
 
-
-        <!-- 2: Tall brand -->
     <div class="pc pc--tall" data-cat="brand">
       <img src="{{ asset('med-kvetovy.png') }}" alt="Med - Květový" loading="lazy" decoding="async">
       <div class="pc-ov"></div>
@@ -233,9 +328,8 @@ requestAnimationFrame(()=>{
       </div>
     </div>
 
-    <!-- 3: Wide UI -->
     <a href="https://www.studio-pebe.cz/" target="_blank" rel="noopener noreferrer" class="pc pc--wide" data-cat="ui">
-      <img src="{{ asset('studio-pebe.webp') }}" alt="Reflex" loading="lazy" decoding="async">
+      <img src="{{ asset('studio-pebe.webp') }}" alt="Beauty Studio PeBe — website design" loading="lazy" decoding="async">
       <div class="pc-ov"></div>
       <div class="pc-arrow">→</div>
       <span class="pc-yr">2025</span>
@@ -249,7 +343,6 @@ requestAnimationFrame(()=>{
       </div>
     </a>
 
-    <!-- 4: Square graphic -->
     <div class="pc pc--sq" data-cat="graphic">
       <img src="{{ asset('skald-ilustrations.png') }}" alt="Skald ilustrations" loading="lazy" decoding="async">
       <div class="pc-ov"></div>
@@ -265,9 +358,8 @@ requestAnimationFrame(()=>{
       </div>
     </div>
 
-    <!-- 5: Wide web -->
     <div class="pc pc--wide2" data-cat="ui">
-      <img src="{{ asset('hokejova-skola.png') }}" alt="hokejova-skola" loading="lazy" decoding="async">
+      <img src="{{ asset('hokejova-skola.png') }}" alt="Hokejová škola Radka Gardoně — UI/UX design concept" loading="lazy" decoding="async">
       <div class="pc-ov"></div>
       <div class="pc-arrow">→</div>
       <span class="pc-yr">2022</span>
@@ -281,79 +373,8 @@ requestAnimationFrame(()=>{
       </div>
     </div>
 
-{{--    <!-- 6: Gradient text card -->--}}
-{{--    <div class="pc pc--sq2" data-cat="graphic">--}}
-{{--      <div class="pc-grad" style="background:radial-gradient(ellipse 80% 80% at 30% 70%, rgba(232,64,32,.7) 0%, rgba(20,80,100,.5) 55%, transparent 80%),radial-gradient(ellipse 60% 60% at 80% 20%, rgba(26,80,96,.6) 0%, transparent 65%)"></div>--}}
-{{--      <div class="pc-big-word">TYPE</div>--}}
-{{--      <div class="pc-text-body">--}}
-{{--        <span class="pc-cat">{{ __('card.type.cat') }}</span>--}}
-{{--        <div class="pc-title">TYPE STUDIES</div>--}}
-{{--        <p class="pc-desc">{{ __('card.type.desc') }}</p>--}}
-{{--        <div class="pc-tags" style="opacity:1;margin-top:10px">--}}
-{{--          <span class="pc-tag">Editorial</span><span class="pc-tag">Experimental</span>--}}
-{{--        </div>--}}
-{{--      </div>--}}
-{{--    </div>--}}
-
-{{--    <!-- 7: Half UI -->--}}
-{{--    <div class="pc pc--half" data-cat="ui">--}}
-{{--      <img src="https://images.unsplash.com/photo-1512314889357-e157c22f938d?w=900&auto=format&fit=crop&q=75" alt="Forma App" loading="lazy" decoding="async">--}}
-{{--      <div class="pc-ov"></div>--}}
-{{--      <div class="pc-arrow">→</div>--}}
-{{--      <span class="pc-yr">2023</span>--}}
-{{--      <div class="pc-info">--}}
-{{--        <span class="pc-cat">{{ __('card.forma.cat') }}</span>--}}
-{{--        <div class="pc-title">FORMA APP</div>--}}
-{{--        <p class="pc-desc">{{ __('card.forma.desc') }}</p>--}}
-{{--        <div class="pc-tags">--}}
-{{--          <span class="pc-tag">iOS</span><span class="pc-tag">Motion</span>--}}
-{{--        </div>--}}
-{{--      </div>--}}
-{{--    </div>--}}
-
-{{--    <!-- 8: Third brand -->--}}
-{{--    <div class="pc pc--third" data-cat="brand">--}}
-{{--      <div class="pc-grad" style="background:radial-gradient(ellipse 70% 70% at 60% 40%, rgba(196,18,8,.65) 0%, rgba(200,64,24,.3) 50%, transparent 75%),radial-gradient(ellipse 50% 60% at 20% 80%, rgba(15,70,90,.6) 0%, transparent 65%)"></div>--}}
-{{--      <div class="pc-big-word">MARK</div>--}}
-{{--      <div class="pc-text-body">--}}
-{{--        <span class="pc-cat">{{ __('card.comet.cat') }}</span>--}}
-{{--        <div class="pc-title">COMET LABS</div>--}}
-{{--        <p class="pc-desc">{{ __('card.comet.desc') }}</p>--}}
-{{--        <div class="pc-tags" style="opacity:1;margin-top:10px">--}}
-{{--          <span class="pc-tag">Logo</span><span class="pc-tag">Motion</span>--}}
-{{--        </div>--}}
-{{--      </div>--}}
-{{--    </div>--}}
-
-{{--    <!-- 9: Third graphic -->--}}
-{{--    <div class="pc pc--third" data-cat="graphic">--}}
-{{--      <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=75" alt="Terrain" loading="lazy" decoding="async">--}}
-{{--      <div class="pc-ov"></div>--}}
-{{--      <div class="pc-arrow">→</div>--}}
-{{--      <span class="pc-yr">2023</span>--}}
-{{--      <div class="pc-info">--}}
-{{--        <span class="pc-cat">{{ __('card.terrain.cat') }}</span>--}}
-{{--        <div class="pc-title">TERRAIN</div>--}}
-{{--        <p class="pc-desc">{{ __('card.terrain.desc') }}</p>--}}
-{{--      </div>--}}
-{{--    </div>--}}
-
-{{--    <!-- 10: Third web -->--}}
-{{--    <div class="pc pc--third" data-cat="web">--}}
-{{--      <div class="pc-grad" style="background:radial-gradient(ellipse 75% 75% at 40% 50%, rgba(20,80,100,.65) 0%, rgba(232,64,32,.25) 60%, transparent 78%),radial-gradient(ellipse 45% 50% at 85% 20%, rgba(232,80,24,.4) 0%, transparent 60%)"></div>--}}
-{{--      <div class="pc-big-word">API</div>--}}
-{{--      <div class="pc-text-body">--}}
-{{--        <span class="pc-cat">{{ __('card.pulse.cat') }}</span>--}}
-{{--        <div class="pc-title">PULSE API</div>--}}
-{{--        <p class="pc-desc">{{ __('card.pulse.desc') }}</p>--}}
-{{--        <div class="pc-tags" style="opacity:1;margin-top:10px">--}}
-{{--          <span class="pc-tag">PHP</span><span class="pc-tag">Redis</span>--}}
-{{--        </div>--}}
-{{--      </div>--}}
-{{--    </div>--}}
-
-    </div><!-- /pg-track -->
-  </div><!-- /pg -->
+    </div>
+  </div>
 </section>
 
 <section id="services">
@@ -371,14 +392,12 @@ requestAnimationFrame(()=>{
   </div>
 </section>
 
-<!-- ABOUT -->
 <section id="about">
   <div class="ab-wrap">
     <div class="ab-img rl">
       <div class="ab-ghost" aria-hidden="true">ROBIN</div>
       <div class="ab-port">
-          <img src="{{ asset('robin.jpeg') }}" alt="Robin Hrdlicka" loading="lazy" decoding="async">
-
+          <img src="{{ asset('robin.jpeg') }}" alt="Robin Hrdlička — developer and designer" loading="lazy" decoding="async">
       </div>
     </div>
     <div class="rr">
@@ -395,7 +414,6 @@ requestAnimationFrame(()=>{
   </div>
 </section>
 
-<!-- PROCESS -->
 <section id="process">
   <div class="rv">
     <div class="sl">{{ __('process.label') }}</div>
@@ -409,7 +427,6 @@ requestAnimationFrame(()=>{
   </div>
 </section>
 
-<!-- CONTACT -->
 <section id="contact">
   <div class="ct-ghost" aria-hidden="true">HELLO</div>
   <div class="ct-in">
@@ -454,7 +471,7 @@ requestAnimationFrame(()=>{
       <button type="button" class="btn-ct" id="open-cf">{{ __('contact.writeBtn') }}</button>
     </div>
     <div class="so-links">
-      <a href="{{ $settings['github_url'] ?? '#' }}" target="_blank" rel="noopener">GitHub</a><a href="{{ $settings['linkedin_url'] ?? '#' }}" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="{{ $settings['github_url'] ?? 'https://github.com/Hrob2113' }}" target="_blank" rel="noopener noreferrer" aria-label="Robin Hrdlička on GitHub">GitHub</a><a href="{{ $settings['linkedin_url'] ?? 'https://www.linkedin.com/in/robin-hrdli%C4%8Dka-653a22351/' }}" target="_blank" rel="noopener noreferrer" aria-label="Robin Hrdlička on LinkedIn">LinkedIn</a>
     </div>
     <div class="ct-sign">{{ __('contact.sign') }}</div>
   </div>
@@ -474,8 +491,8 @@ requestAnimationFrame(()=>{
       <span>HROB</span>&ensp;<span style="color:var(--low)">/ Robin Hrdlicka</span>
     </div>
     <div class="ft-links">
-      <a href="https://github.com/Hrob2113" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://www.linkedin.com/in/robin-hrdli%C4%8Dka-653a22351/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/Hrob2113" target="_blank" rel="noopener noreferrer" aria-label="Robin Hrdlička on GitHub">GitHub</a>
+      <a href="https://www.linkedin.com/in/robin-hrdli%C4%8Dka-653a22351/" target="_blank" rel="noopener noreferrer" aria-label="Robin Hrdlička on LinkedIn">LinkedIn</a>
     </div>
     <div class="ft-copy">{{ __('footer.copy') }}</div>
     <a href="#hero" class="ft-top">{{ __('footer.top') }}</a>
