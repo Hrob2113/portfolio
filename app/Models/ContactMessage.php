@@ -32,4 +32,11 @@ class ContactMessage extends Model
     {
         return $query->where('is_read', false);
     }
+
+    public function markAsRead(): void
+    {
+        if (! $this->is_read) {
+            $this->update(['is_read' => true]);
+        }
+    }
 }

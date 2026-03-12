@@ -10,6 +10,12 @@ class Translation extends Model
 {
     use HasFactory;
 
+    /** @var array<string, string> */
+    public const LOCALES = [
+        'en' => 'English',
+        'cs' => 'Czech',
+    ];
+
     protected $fillable = [
         'group',
         'key',

@@ -9,6 +9,14 @@ class Setting extends Model
 {
     use HasFactory;
 
+    /** @var array<string, string> */
+    public const GROUPS = [
+        'social' => 'Social',
+        'contact' => 'Contact',
+        'seo' => 'SEO',
+        'general' => 'General',
+    ];
+
     protected $fillable = [
         'key',
         'value',

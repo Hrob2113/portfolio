@@ -1,0 +1,362 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@config 'tailwind.config.js';
+
+/* ─────────────────────────────────────────────────────────────
+   PORTFOLIO VARIABLES
+───────────────────────────────────────────────────────────── */
+
+html.fi {
+    --p-bg:        #06060A;
+    --p-surface:   #0D0F14;
+    --p-surface2:  #121418;
+    --p-teal:      #1A8090;
+    --p-red:       #B01208;
+    --p-cream:     #EAD8B8;
+    --p-text:      #D8D0C4;
+    --p-mid:       rgba(216, 208, 196, 0.5);
+    --p-low:       rgba(216, 208, 196, 0.25);
+    --p-border:    rgba(216, 208, 196, 0.07);
+    --p-border2:   rgba(216, 208, 196, 0.12);
+    --p-r:         12px;
+    --p-r-lg:      16px;
+    --p-r-xl:      20px;
+    --fm: 'IBM Plex Mono', monospace;
+    --fd: 'Barlow Condensed', sans-serif;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LOGIN PAGE — hero-gradient background
+───────────────────────────────────────────────────────────── */
+
+.fi-simple-layout {
+    position: relative;
+    min-height: 100vh;
+    background: var(--p-bg);
+    overflow: hidden;
+}
+
+/* Animated thermal-gradient — mirrors hero shader palette */
+.fi-simple-layout::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+        radial-gradient(ellipse 80% 60% at 18% 78%, rgba(255, 80, 10, 0.10) 0%, transparent 60%),
+        radial-gradient(ellipse 65% 80% at 78% 22%, rgba(0, 52, 72, 0.28) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 45% at 52% 52%, rgba(26, 80, 96, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 100% 50% at 50% 105%, rgba(0, 22, 34, 0.45) 0%, transparent 55%);
+    animation: hero-drift 18s ease-in-out infinite alternate;
+}
+
+/* Subtle film grain */
+.fi-simple-layout::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    opacity: .03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+}
+
+@keyframes hero-drift {
+    0%   { transform: scale(1)    translate(0, 0); }
+    40%  { transform: scale(1.03) translate(-1%, 1.2%); }
+    70%  { transform: scale(1.05) translate(1.2%, -0.8%); }
+    100% { transform: scale(1.02) translate(-0.8%, 0.4%); }
+}
+
+.fi-simple-main-ctn {
+    position: relative;
+    z-index: 2;
+}
+
+/* Login card — frosted dark glass */
+.fi-simple-main {
+    background: rgba(10, 13, 18, 0.78) !important;
+    backdrop-filter: blur(40px) saturate(130%);
+    -webkit-backdrop-filter: blur(40px) saturate(130%);
+    border: 1px solid var(--p-border2) !important;
+    border-radius: 20px !important;
+    box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.55),
+        0 2px 0 rgba(255, 255, 255, 0.04) inset !important;
+    color: var(--p-text) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   PANEL CHROME
+───────────────────────────────────────────────────────────── */
+
+.fi-body {
+    background: var(--p-bg) !important;
+    color: var(--p-text) !important;
+    font-family: var(--fm) !important;
+}
+
+.fi-sidebar {
+    background: var(--p-surface) !important;
+    border-right: 1px solid var(--p-border) !important;
+}
+
+.fi-topbar {
+    background: rgba(9, 10, 14, 0.90) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid var(--p-border) !important;
+    box-shadow: none !important;
+}
+
+.fi-main {
+    background: var(--p-bg) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TABLES & SECTION CARDS — rounded, subtle
+───────────────────────────────────────────────────────────── */
+
+.fi-ta-ctn {
+    background: var(--p-surface) !important;
+    border: 1px solid var(--p-border) !important;
+    border-radius: var(--p-r-lg) !important;
+    box-shadow: none !important;
+    overflow: hidden;
+}
+
+.fi-section {
+    background: var(--p-surface) !important;
+    border: 1px solid var(--p-border) !important;
+    border-radius: var(--p-r-lg) !important;
+    box-shadow: none !important;
+}
+
+.fi-section-header {
+    border-bottom: 1px solid var(--p-border) !important;
+}
+
+.fi-ta-header-ctn {
+    background: var(--p-surface2) !important;
+    border-bottom: 1px solid var(--p-border) !important;
+}
+
+.fi-ta-row:hover td {
+    background: rgba(255, 255, 255, 0.025) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   FORMS & INPUTS — rounded, dark
+───────────────────────────────────────────────────────────── */
+
+.fi-fo-field-wrp-label label,
+.fi-fo-field-wrp-hint {
+    color: var(--p-mid) !important;
+    font-size: 11px !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+    font-family: var(--fm) !important;
+}
+
+.fi-input-wrp {
+    border-radius: var(--p-r) !important;
+}
+
+.fi-select-input,
+textarea.fi-fo-textarea {
+    background: var(--p-surface2) !important;
+    border-color: var(--p-border2) !important;
+    border-radius: var(--p-r) !important;
+    color: var(--p-text) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BUTTONS — rounded pill style
+───────────────────────────────────────────────────────────── */
+
+.fi-btn {
+    border-radius: 999px !important;
+    font-family: var(--fm) !important;
+    font-size: 11px !important;
+    letter-spacing: .06em !important;
+}
+
+.fi-ac-btn-action,
+.fi-ta-btn {
+    border-radius: var(--p-r) !important;
+    font-family: var(--fm) !important;
+    font-size: 11px !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   BADGES — muted, rounded
+───────────────────────────────────────────────────────────── */
+
+.fi-badge {
+    border-radius: 999px !important;
+    font-family: var(--fm) !important;
+    font-size: 10px !important;
+    letter-spacing: .06em !important;
+    font-weight: 500 !important;
+    padding: 2px 8px !important;
+}
+
+/* Muted badge colors */
+.fi-badge.fi-color-primary,
+.fi-badge.fi-color-info {
+    background: rgba(26, 128, 144, 0.15) !important;
+    color: #5BBCCE !important;
+    border-color: rgba(26, 128, 144, 0.2) !important;
+}
+
+.fi-badge.fi-color-success {
+    background: rgba(34, 120, 80, 0.15) !important;
+    color: #5BAA82 !important;
+    border-color: rgba(34, 120, 80, 0.2) !important;
+}
+
+.fi-badge.fi-color-warning {
+    background: rgba(160, 110, 20, 0.15) !important;
+    color: #C8963A !important;
+    border-color: rgba(160, 110, 20, 0.2) !important;
+}
+
+.fi-badge.fi-color-danger {
+    background: rgba(176, 18, 8, 0.14) !important;
+    color: #E06060 !important;
+    border-color: rgba(176, 18, 8, 0.2) !important;
+}
+
+.fi-badge.fi-color-gray {
+    background: rgba(216, 208, 196, 0.08) !important;
+    color: var(--p-mid) !important;
+    border-color: var(--p-border2) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   NAVIGATION — sidebar items
+───────────────────────────────────────────────────────────── */
+
+.fi-sidebar-item-label {
+    font-family: var(--fm) !important;
+    font-size: 11px !important;
+    letter-spacing: .07em !important;
+    text-transform: uppercase !important;
+    color: var(--p-mid) !important;
+}
+
+.fi-sidebar-item-button {
+    border-radius: var(--p-r) !important;
+}
+
+.fi-sidebar-item-button.fi-active {
+    background: rgba(26, 128, 144, 0.12) !important;
+}
+
+.fi-sidebar-item-button.fi-active .fi-sidebar-item-label {
+    color: #7ECFDA !important;
+}
+
+.fi-sidebar-item-button.fi-active .fi-sidebar-item-icon {
+    color: #5BBCCE !important;
+}
+
+.fi-sidebar-item-button:hover:not(.fi-active) {
+    background: rgba(237, 230, 218, 0.04) !important;
+}
+
+.fi-sidebar-item-button:hover:not(.fi-active) .fi-sidebar-item-label {
+    color: var(--p-text) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   TYPOGRAPHY
+───────────────────────────────────────────────────────────── */
+
+.fi-header-heading,
+.fi-section-header-heading {
+    font-family: var(--fd) !important;
+    letter-spacing: .06em !important;
+    font-size: 1.6rem !important;
+    color: var(--p-cream) !important;
+}
+
+.fi-logo span,
+.fi-sidebar-header {
+    font-family: var(--fm) !important;
+    letter-spacing: .12em !important;
+    color: var(--p-text) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   WIDGETS (stats cards)
+───────────────────────────────────────────────────────────── */
+
+.fi-wi-stats-overview-stat {
+    background: var(--p-surface) !important;
+    border: 1px solid var(--p-border) !important;
+    border-radius: var(--p-r-xl) !important;
+    box-shadow: none !important;
+}
+
+.fi-wi-stats-overview-stat-label {
+    font-family: var(--fm) !important;
+    font-size: 10px !important;
+    letter-spacing: .08em !important;
+    text-transform: uppercase !important;
+    color: var(--p-low) !important;
+}
+
+.fi-wi-stats-overview-stat-value {
+    font-family: var(--fd) !important;
+    font-size: 2.2rem !important;
+    letter-spacing: .04em !important;
+    color: var(--p-cream) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   DROPDOWNS & MODALS
+───────────────────────────────────────────────────────────── */
+
+.fi-dropdown-list {
+    background: var(--p-surface2) !important;
+    border: 1px solid var(--p-border2) !important;
+    border-radius: var(--p-r-lg) !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+}
+
+.fi-dropdown-list-item-label {
+    font-family: var(--fm) !important;
+    font-size: 11px !important;
+    letter-spacing: .04em !important;
+}
+
+.fi-modal-window {
+    background: var(--p-surface) !important;
+    border: 1px solid var(--p-border2) !important;
+    border-radius: var(--p-r-xl) !important;
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   NOTIFICATIONS
+───────────────────────────────────────────────────────────── */
+
+.fi-no-notification {
+    background: var(--p-surface2) !important;
+    border: 1px solid var(--p-border2) !important;
+    border-radius: var(--p-r-lg) !important;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SCROLLBAR
+───────────────────────────────────────────────────────────── */
+
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(237, 230, 218, 0.10); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(237, 230, 218, 0.18); }

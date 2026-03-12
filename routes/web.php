@@ -29,4 +29,8 @@ Route::post('/contact', [ContactController::class, 'store'])
     ->middleware('throttle:5,1')
     ->name('contact.store');
 
+Route::get('/dashboard', fn () => redirect('/admin'))
+    ->middleware('auth')
+    ->name('dashboard');
+
 require __DIR__.'/auth.php';

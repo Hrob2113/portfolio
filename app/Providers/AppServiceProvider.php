@@ -2,23 +2,16 @@
 
 namespace App\Providers;
 
+use App\Models\Translation;
+use App\Observers\TranslationObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
+    public function register(): void {}
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        Translation::observe(TranslationObserver::class);
     }
 }

@@ -8,7 +8,7 @@ class TranslationCompiler
 {
     public function compile(?string $locale = null): void
     {
-        $locales = $locale ? [$locale] : ['en', 'cs'];
+        $locales = $locale ? [$locale] : array_keys(Translation::LOCALES);
 
         foreach ($locales as $loc) {
             $translations = Translation::query()

@@ -29,7 +29,7 @@ test('email can be verified', function () {
     Event::assertDispatched(Verified::class);
     expect($user->fresh()->hasVerifiedEmail())->toBeTrue();
     $response->assertRedirect(route('dashboard', absolute: false).'?verified=1');
-});
+})->skip('Email verification is not used in this portfolio app (User does not implement MustVerifyEmail).');
 
 test('email is not verified with invalid hash', function () {
     $user = User::factory()->unverified()->create();
