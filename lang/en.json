@@ -31,6 +31,8 @@
     "card.type.desc": "An ongoing exploration of type as image — condensed, expanded, reversed.",
     "card.med.cat": "Brand Identity",
     "card.med.desc": "Mark, type, palette, stationery.",
+    "card.graupner.title": "Website for a Plumber in Louny",
+    "card.graupner.desc": "A business website for a plumber in Louny built with Laravel and Statamic, focused on clear service presentation and easy contact.",
     "contact.eye": "Get in touch",
     "contact.formHead": "LET'S TALK",
     "contact.formSub": "Tell me about your project. I typically respond within 24 hours.",

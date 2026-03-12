@@ -31,6 +31,8 @@
     "card.type.desc": "Průběžná explorace písma jako obrazu — zúžená, roztažená, obrácená.",
     "card.med.cat": "Brand identita",
     "card.med.desc": "Značka, typografie, paleta, tiskoviny.",
+    "card.graupner.title": "Web pro instalatéra v Lounech",
+    "card.graupner.desc": "Firemní web pro instalatéra z Loun vytvořený v Laravelu a Statamicu se zaměřením na přehlednou prezentaci služeb a snadý kontakt.",
     "contact.eye": "Ozvěte se",
     "contact.formHead": "POJĎME SI PROMLUVIT",
     "contact.formSub": "Řekněte mi o svém projektu. Obvykle odpovídám do 24 hodin.",
