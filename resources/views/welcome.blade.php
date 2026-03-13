@@ -314,110 +314,43 @@
         <div class="pg rv" style="transition-delay:.18s" id="portfolio-grid">
             <div class="pg-track">
 
-                <a href="https://www.kavarnalouny.cz/" target="_blank" rel="noopener noreferrer"
-                   class="pc pc--featured" data-cat="web">
-                    <img src="{{ asset('skald.png') }}" alt="Skald Coffee — website screenshot" loading="lazy"
-                         decoding="async">
+                @foreach ($works as $work)
+                    @if ($work->link)
+                        <a href="{{ $work->link }}" target="_blank" rel="noopener noreferrer"
+                           class="pc {{ $work->layout }}" data-cat="{{ $work->category }}">
+                    @else
+                        <div class="pc {{ $work->layout }}" data-cat="{{ $work->category }}">
+                    @endif
+
+                    @if ($work->imageUrl())
+                        <img src="{{ $work->imageUrl() }}" alt="{{ $work->title }}" loading="lazy" decoding="async">
+                    @endif
                     <div class="pc-ov"></div>
                     <div class="pc-arrow">→</div>
-                    <span class="pc-yr">2026</span>
+                    <span class="pc-yr">{{ $work->year }}</span>
                     <div class="pc-info">
-                        <span class="pc-cat">{{ __('card.skald.cat') }}</span>
-                        <div class="pc-title">SKALD COFFEE</div>
-                        <p class="pc-desc">{{ __('card.skald.desc') }}</p>
-                        <div class="pc-tags">
-                            <span class="pc-tag">Laravel</span><span class="pc-tag">Tailwind CSS</span><span
-                                class="pc-tag">JS</span>
-                        </div>
+                        <span class="pc-cat">{{ $work->category_label }}</span>
+                        <div class="pc-title">{{ $work->title }}</div>
+                        @if ($work->description)
+                            <p class="pc-desc">{{ $work->description }}</p>
+                        @endif
+                        @if ($work->tags)
+                            <div class="pc-tags">
+                                @foreach ($work->tags as $tag)
+                                    <span class="pc-tag">{{ $tag }}</span>
+                                @endforeach
+                            </div>
+                        @endif
                     </div>
-                </a>
 
-                <a href="https://www.louny-instalater.cz/" target="_blank" rel="noopener noreferrer"
-                   class="pc pc--tall" data-cat="web">
-                    <img src="{{ asset('graupner.png') }}" alt="Graupner - Instalater" loading="lazy"
-                         decoding="async">
-                    <div class="pc-ov"></div>
-                    <div class="pc-arrow">→</div>
-                    <span class="pc-yr">2026</span>
-                    <div class="pc-info">
-                        <span class="pc-cat">{{ __('card.skald.cat') }}</span>
-                        <div class="pc-title">{{ __('card.graupner.title') }}</div>
-                        <p class="pc-desc">{{ __('card.graupner.desc') }}</p>
-                        <div class="pc-tags">
-                            <span class="pc-tag">Frontend</span><span class="pc-tag">Backend</span><span
-                                class="pc-tag">Statamic</span>
+                    @if ($work->link)
+                        </a>
+                    @else
                         </div>
-                    </div>
-                </a>
+                    @endif
+                @endforeach
 
-                <a href="https://www.studio-pebe.cz/" target="_blank" rel="noopener noreferrer" class="pc pc--wide"
-                   data-cat="ui">
-                    <img src="{{ asset('studio-pebe.webp') }}" alt="Beauty Studio PeBe — website design" loading="lazy"
-                         decoding="async">
-                    <div class="pc-ov"></div>
-                    <div class="pc-arrow">→</div>
-                    <span class="pc-yr">2025</span>
-                    <div class="pc-info">
-                        <span class="pc-cat">{{ __('card.pebe.cat') }}</span>
-                        <div class="pc-title">BEATY STUDIO PeBe</div>
-                        <p class="pc-desc">{{ __('card.pebe.desc') }}</p>
-                        <div class="pc-tags">
-                            <span class="pc-tag">Frontend</span><span class="pc-tag">Prototype</span><span
-                                class="pc-tag">Design System</span>
-                        </div>
-                    </div>
-                </a>
-
-                <div class="pc pc--sq" data-cat="graphic">
-                    <img src="{{ asset('skald-ilustrations.png') }}" alt="Skald ilustrations" loading="lazy"
-                         decoding="async">
-                    <div class="pc-ov"></div>
-                    <div class="pc-arrow">→</div>
-                    <span class="pc-yr">2026</span>
-                    <div class="pc-info">
-                        <span class="pc-cat">{{ __('card.signal.cat') }}</span>
-                        <div class="pc-title">SKALD COFFEE ILUSTRATIONS</div>
-                        <p class="pc-desc">{{ __('card.signal.desc') }}</p>
-                        <div class="pc-tags">
-                            <span class="pc-tag">Artwork</span><span class="pc-tag">Print</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pc pc--wide2" data-cat="ui">
-                    <img src="{{ asset('hokejova-skola.png') }}"
-                         alt="Hokejová škola Radka Gardoně — UI/UX design concept"
-                         loading="lazy" decoding="async">
-                    <div class="pc-ov"></div>
-                    <div class="pc-arrow">→</div>
-                    <span class="pc-yr">2022</span>
-                    <div class="pc-info">
-                        <span class="pc-cat">{{ __('card.kasida.cat') }}</span>
-                        <div class="pc-title">HOKEJOVÁ ŠKOLA RADKA GARDONĚ</div>
-                        <p class="pc-desc">{{ __('card.kasida.desc') }}</p>
-                        <div class="pc-tags">
-                            <span class="pc-tag">Figma</span><span class="pc-tag">UX/UI</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pc pc--sq" data-cat="brand">
-                    <img src="{{ asset('med-kvetovy.png') }}" alt="Med - Květový" loading="lazy" decoding="async">
-                    <div class="pc-ov"></div>
-                    <div class="pc-arrow">→</div>
-                    <span class="pc-yr">2024</span>
-                    <div class="pc-info">
-                        <span class="pc-cat">{{ __('card.med.cat') }}</span>
-                        <div class="pc-title">Med Květový</div>
-                        <p class="pc-desc">{{ __('card.med.desc') }}</p>
-                        <div class="pc-tags">
-                            <span class="pc-tag">Logo</span><span class="pc-tag">Typography</span><span
-                                class="pc-tag">Print</span>
-                        </div>
-                    </div>
-                </div>
-
-        </div>
+            </div>
         </div>
     </section>
 

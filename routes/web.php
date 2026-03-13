@@ -2,13 +2,15 @@
 
 use App\Http\Controllers\ContactController;
 use App\Models\Setting;
+use App\Models\Work;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     $settings = Setting::pluck('value', 'key')->toArray();
+    $works = Work::query()->published()->ordered()->get();
 
-    return view('welcome', compact('settings'));
+    return view('welcome', compact('settings', 'works'));
 })->name('home');
 
 Route::get('/bg-configurator', function () {

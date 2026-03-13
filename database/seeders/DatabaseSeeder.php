@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             TranslationSeeder::class,
             SettingSeeder::class,
+            WorkSeeder::class,
         ]);
     }
 }
